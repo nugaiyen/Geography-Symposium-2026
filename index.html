@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GEOG Undergraduate Symposium Dashboard</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+      color: #222;
+    }
+
+    header {
+        background: 
+        linear-gradient(rgba(40,40,40,0.45), rgba(40,40,40,0.45)),
+        url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMTEhUTExMWFhUXGBcaFxgXGB4aGBcaGB0bFxgYFxgdHSgiHh8lHR0dITEhJSkrLi4uGx8zODMtNygtLisBCgoKDg0OGxAQGy0lICUwLS0tLS8vLS0tLS0tLS8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAKgBLAMBIgACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAACAAEDBAUGBwj/xABLEAABAgQDBQYDBQQFCgcBAAABAhEAAxIhBDHwBRNBUWEGInGBkaEyscEUI0LR4QdSYvEkM3KCshUWU2NzkqKz0uI0NkNEdIOjF//EABoBAAMBAQEBAAAAAAAAAAAAAAABAgMEBQb/xAAjEQACAgMAAQQDAQAAAAAAAAAAAQIRAxIhMQQTQVEUIjJh/9oADAMBAAIRAxEAPwChKlhi5blZ+IvEqZSOZubWyuWeI6+g1o6d3CtW8+GvBgPs3f2eEqLKEIf4jw4ZXd+HTz9IaWmXzOQ4Xfjz5/PyhSu9034jq/JvJufW8IZZe469NX6vGr+yrJ1IluL28L5CCEtDnve3UHXX0iu4DW4Xchsh00CODRKkirIe3Pw52/WJaf2xiWhAHdL+XQ5a/SMpFvDl0HXXuU/8I9uvTV+rokMLDLpyT014RSTE6CAFWv3h117QISG9OHj118jcVZD2/eHTnb9bwLhrAcOXXpr1c6A75fpyHXx1cuQH1zGtNAEhhYZdOSemvCHB72Qz6fvDpz/LO8FAJOXp9euvk6ms7+3IWz17kEm2XLlyPT5dersVWFh6DJh05cfA5ECHXQskAD65jrr2gQA3pw8euvkwX3nbjk3UdOfvbO8JJtkOHLr08dAuUwsdhb8ug669yQAq1+8OuvaIyqwsPQZMOnLj4HIgQaFXuB6AcR05/lneE0w4CkBn8OHj10/o6gPb6DrrpmQSq2Xt+njl15F3KsrfLkHu38g3BgKp2IckVHXF9fn3YSAG9OHj118mqvl7dfXP8s7wL2y1p/fq5QWEWt+XQDnr3KQznXEHVvL8MCTlrlr04MAquOtfXreChWOG1rT+aWLW1014eZAr046dPH36u9Q5DhxHPw14MBVMVjvdx6nwfx9vLhArGvMdfz/IfT25eGvG8FV0HqOnTXq7oBj+XDqRz17wKoK2iOZ6Qw1ccvDXjeDoAGEEPBltEdOkK2iOZ6QnELI92NeutCEZYgoRg1HYG6EDuolhQtA2It2Na18nErqfKDeCRrQiZQ4NS6FVq/TWhEiVHT8zq18+LxXBGta+ThYiuC6WEqZ+XHqM25ZaphwpTZ+/5+Pv/ZiATG15/rpofeDWvHWS4Mnc2/Xwbnm/vxeCTNLv9fPwy014q1jXy1+pfejn7efz1whUg6WCot/MdPrqzssm3lz6D5jx5XeIRMDNry9T787ILGtaDZZl0FlhSy9j6Hz4+v8A2vApduJ9dev/AEuAmh8tO/z/AD6QyVhteH109lQEilEt+vQfTx83gdcOXpl5N/DAjXy14Z8Sw8eHLo/PnfTRVCDvry5+WfTjTDubfrn+b+fm8R+Y03XqfXxZ9ZeXPlby8yUBKFEZHzHq/LLy/u3iN9MenTwz+iYFxmc/q2vn0h3GtdfnzsUAYUbXPv4eOfn5vDB+n0y9MvJv4XgdfTn09vMirXmPHnrhBQBElj+R6dPDP6Jhw+n5luH68rkxGr9Pl10/oxa35dfHXuXSEHUfbl/C/LQtlCU+n5p/TP8AKImh9fLWrPgdDKi/mHzsxOevd4YH5df3dfygdavC17eOvaDgBl7/APdzTrQhyo+/Xnr+bxHr5Qg2vHxgAd/l15Nr8oL1z69P000RwoAJAo9ffmYDXHlDPCeAAn1fprQhVfTnzMCIaDgBa9oR17Q0MYOWATw2vaGbVoQGm1rrBaDojrPpCBhm1rXvBJT194iT4Ul0pCfrQhGdrQiiJ0OJkcnuM21RcE+CE7TxRE2HEyHuLUvb2EJ0Uq4QmwOY9S7vtcYcT/prX6RTC9a1lD1nmYrdi1LYmwe9imlfWCC+vzh7i1Le81rXyghNioFm14IKPD84fuBqWBNd7ZEj01riVfSKspdlce8X6ZQRmHTwLKn0ThROVwVeta+tYLOta8IVfpF7i1LNUOFdIrb0wq4N+hqWn1rX1VUVRMhb3Wuunh7iotVa1r5wxVrWvrW3h4atCMyBSBotPrWvlDA61r5xXrMITINvgKLBOta+qJ6a1rhEAma9NaEMJh08GwUWAba1rzhFUQBZh95oxSmLUlq1oQqvOI31fWucODBuGob60NfNBWtCAc61r0h3Ota8YW4ahE9Na1xhVRHeHvrWvSFsOhwqGMzp7wqTp9a5wN9a16wtgoMrhwrwgGOta9IJlcD8/wAomXgqPk5veQ4mRXCrZQ4V0jz7OmizVDhUVwqJAYpMlkwMEIiqggYuPWSyYGDBiBK4RmRSYUWXEIKiuZkLfQ9hUWUXLAEnkA59BHYdkOxi58z+lyJqJKg4VvN0oKByUkd+/llHB7yYO8JCpzGyZRmWzYrKClV7ixjMm4lSDWvZUtrOpacVckEi6p5GQJ8jHm+p9XLsEjqxYF/R75M/Zhs1CVKlSllYCiE/aZgClHgSVEX4kiPMcbsfEyLTsPMR1Kak+FaXSfWOV/ziCu6NlYLID+rmvna4m81AP1SOUWtnY2ef6vZxSlRvuhiwl8shiKefDyjm9P6meJ8NcuKMzTK+MJ4rJmG9QT5E+7pEPvo9yM7VnntU6J6oVUQbyFVFJ9ET1QQVFcrhBUMCd4cKiFK4MQ10TDB00KrWtfKECIVIh9AeqFWIEJhwkQqCx6rxIg69IGsQO/h2BYTBCKpxMCcTA5CoupOtGH1rX5xROKhjijBuPU0IYNr+cUPtML7TC3HRfca/nCcc4ofaYX2nWhC9wNS+lQhxTxjN38EnE6t+UTPJwcY9MZZhjAPCjkOgkCjBpmxCIUFiosb2HrMVw0EDFKTFqS1Q1RgRCYRVk0E5h3gQBDtAgYdVm58iR7i8HtTY8tOElYhIur7ShfeVZaKFyzn+6o+kRARqze9sucnijFIWfCbIXL+ctPrHN6mEdNqNcUntVmbtbZCBtOZhwnuESaUpJAG+RLICQD/HlGvt6SnD4yamQDKAKSAlSg1YExs7NVT5CC2HhTO23g6n+9lYKaGzZEiWs/8ALMct2o2vMVjsWtMxYCp85r3prUEg+AYRxYpxjVqzonFy+TTKybu7w4TGdsmYpSCVKKmIsWs/k8aIVHq4MimrRxZIOLoIJhwmBqEG3SN1Rn0emHEswUqWSeXjF1EhAzJMWo2TZSEkxKMMrNjFuiWLxJ9rToRcYr5Ym2UNyoQt2cnGtaESzZoOUR1iFSH0fddfnBFOUQ1CHrEJMCRhrWvCBLQFoQSILAItAECJBJB/FDfZhzgYIiKYAiJ/s/UQP2fwiaHZE0O0OZbQxTEuhiaERCIhoKCx2hiIeGMCQGQDCfp+sRPD1GOOzoJgbw48IhCjBuYBkrw4MROYNLw7EE8O+tCAEFFWKh3h3ijNx5SoijIt8TRGdpqZ6AALfFz1q0ZfkQRXtM06o1tmzf6Lj5fOTKmv0kTkAjz3vtGDgMZvKrMzcXzf8o3NjpBGJSrjgsWB1KUbxI9UA+ULLJSxNoIKppM67sRsyYrGYHHqSoSJOy0qM2k0BUtK8OU1ZVUupg5aPHZgKgFEKJIdRuSTmSS2Z5x9B7CxBR2VrTmMJPb1WI+fKbF3cZXt52f5R5cTsZr9n0gpI5kHVo1Nz1jF2KSG6g/SNgLPOPV9G6x9OLP/AESy5Y5xYSqKW81eH3p5x2qaMNS4JkTp3ZlKUVqEwFIQih0rB+MmZ+Gkc83DdMta1n4BVz6ANfMPdrR3ScPJq3ad2o1fF9mlJFFJVVeXZTgimk8O8c45PUer15E2x4b6zjlTYjMyJFS1UzFqAHfSEUhgQozanayWpDANmeUVao3x5lNWjOUHF0yWuFVEdUMVRexNE1XSHChyivXDVGK3QtSzWOUKscor1wwVE7jotib0h99FOqFVDU+A4lwTta19W30VKoeqDcNSwqZAqmREDDBRhbWFEtUKqI64d4LAcqh6oF4d4ltfI0jGhAR3Ozv2epmoC/8AKWHSFZd1Ch6ie0Q9qOwYweG+0JxkvECtCSlEsBgt+9UJq+XK8cPvR+zp1ZxrQaEEkANnxdh1LAlvAcYimTgnM3PQn5CNSScPuqiJxnCmnuqCSCe8C0s2bxeFlzKK55HCDfkyhgZ1RO8HotvD4Y1tp7PTKEpSZomomorCgilmVQpJBJuFAjxERTVJ3aVBLkq/dyAPB0vcREZJ3SZtRYKTLpPMpWt+QsnLrGGGUlLz5NJpURgCDEQFd4mwU0BYJZg5uAoWBN0qDHwMdrlXTBKzKmYZc3EKRLQta1GyUJKlFg5ZIuWAfyjX/wAytolKlfYsSyLH7oj0FiryBjak9pJkiYJ0ncpWg1BsPKSHUhaS9CQTZXOOl/8A6fju885NlKApkJOSKgC6siSOseZJ03R1LwcDhdiYiQFKm4afLSaRVMlLQly9nUBeNvsoAqeof6jFf8iZn0jpNn9o5+1JisLiZtcjdLmkIQmWquWmtLKANnt1jkuxyiZi5h/BhcUs+AkKBb/ejohkvC0Zyj+6Z6jsz/ymf/hzvmuPnozizOW5P6OI+htjqbsoSQC2EnWLsWK7FiC3gY+fpssG4SEj+Eqa9/xEmOSJsy1slQrT/ZX9I1J08JBUXYNlne0ZWCFMwAZBJ9wCfeLWP/q1Pa6b/wB4R3Yp64m0c843MR2vL5K/3YKXtVBIDKDlsv1jImsGpW/kzQCTcf2hYeMZfkT+y/aidQ6TmHZ2zsc+B6RfnSpbEhJp75uAfhUkcP7XCM/DK79xwN/GoRLgdrA4dSd0kOCHdVV5ktbhVyPgZmZiYed3Nix8iXJhRuSRmlaAf7xnHLyHvFCsRpYDEywEy5kozUzCkllKCpZlqnEMXAPxEEOM4Pb0rDplo3UpSVFXeJXUGY2atXFj5RrgzqP6MjJjb/YyyoRexuypktJWWKKUKrSbGsAhqgC98m65RDsWSmbPQiYQlBcqL0gABy3DyjqdpYWmYZC1PKlS5dJmS6kjugVFKumRi8vqHBpJEwxJqzi6oYKi9t1KUziEy6BRJLf2pSSbcHJeM0mOiE3JWZuKXCWqECIiBhVRViomeE4iEKh6oLCiV4TxCFQTwWFElUO8RVQ9cFsKJHhVCIqoeqFYUSAwQIivVBpVCm3Q4o3cLt2Rh0SkzpRPdSt0IQonvEUqdSbMjN+MOO1GzSwm4afMRatIqRW3MjFsLl/hbpGB2pw+7mS0u4oQUl5XwkrYvKmzE5g5qfplGIJY6eqf+qPIbbO1I0tqHDqpOG+0FVTUzUoYAgsE0KJJcDMRNgsUoososMuuX5+NuUYy1UhwA9SSCC/M2IVGnstYoIpllkm5KwbkXDLCahkAxDO4JvCb+wJZU8AU8lKA7ysuXHpCVP8AuKWP9ahTueEuYlmy/lEMjEMSLjvfvpDOAcy7t4wGPXSiklSVEoUASLjvd63Qj1i4ypp/Qmr4R3g5K78MlZ9QecZhmMCym9edvrHUHaiUoSkpSVXUghKGIK1WmHOwFqY2efnUR7ZX3SrkFK/h7qFCoigklNLuzXIDZxo4zDlqiCAuYS61fwDJ2sCS5+WUZ+0cSVApZL2uDYd0Ks56tBrwdQJJlVWYnFYdLCnigrqjlbNUdL+zoEY0FktuZoNOR+7F/NnPUxg9kpjS8Wo/h2dif/03Ukf440f2dzgMYb/+hO/wRT7PSiNnbSWASd1hZQP+0mVKH/ADGsHWORD/AKR6d2Lx6F7AThikkqwWMVl3WlqKG8XUPSPAUYopbuoNhmkHO9uUe5fsfkS1YbBVTe+cPj0CSUEiYhU5BUor+EUlgxzq6R4knASw4VPSkixFJNxmLdbRhE0YsAomZ/dPyEXtpYiXuqRKFQpdalTKgXDsN4UEcPhHrGJiCyzSurkoOHtE2HWFBlLLkpF8mcOajYRe/KFr2wVTBzHvaB3rkOeIjc2zsrDS95up1dNLNMlrqdS0mkJF7BJtk/hEGI2XJGFXM3g3yZqUhG8luUkAlVHxG5ZxaJ2HRfSWXfkfqYy5J/o67Xv/AIhFty6bXpOXgYoyT9zMHQ/4o3yO5GcVw1cVPahRGT8/3Vn84P7TWSkIVnYAqUXbkxJihii4A8Rwu6VjpF7YW0Dh8RLxIAeVMqSHACjYMSxbjwMZ3TsquGnsD7vEJM1M1KKV1kSphKUlJDkBBIu3Dn4x0lKPtU4ALWhKUpqHdTY37y0h7ghmyg5H7VMRMmibuJY3ktUkKVPSGLhYturP8IdLOc7FsXtF24xGMaVMG7lpUiYaZiZhrAIT3pYQGpJdPNsocsrm+iUK8FXtAl5ziwMuSRd7bpIzFjxjN3J5xo4vBGYmWpOIEsbmTnKKlHukE2JAAIbraBldnJoIJxYp4ndPd/hKHCsnNQt1joh6qKSTM3hbM8STzhtyecWdoy9zNXKqC6CBWkMFOkKcA3FjkYgE4c47E01Zg7QO5POC3UPvBz+UMrECHwOjBAgggQO8TCrHOD5AIIhqIrYrF0lIDXfME8uUac6RKqZOMlrHBQlTEg2ewUyrXGXCMZZ4xdMtY5Mq0QqIGeaC1VQZ3CSkeF4ATxy9IuM1JWhOLTJaIcS4Dep84EToJeBIr7emk7k3tLSL52XOPKMpSj+f1i/tRRpl5fBm5zqmF/GM+Wq4bOwcuGPPjHlnYCsmk+I+samy1ilTsO6oB2LmxAHInnyjMnCxq/eBLcRfIs3rFrBSjTU5YGokXAazK4aEAElVM1wQGWDYkf7rR0O9WokznWUpnJUJyhN7rSlMFFVuDMbRzSCUFiVHIOCwy5Rp4BIpUHSAd6C9HdBouzufIGFYUCjYNSagtIcq7tAJDTBLYuu+YPnA4xUuSd0UJVSB8SpgIzUQKFpGaibvwjdRIJRYhXfmuwl/6SWclqBzu4Ec32sBTiSMjTLPDl0tDEaGC2Li8SjfSsNNWhyKkpZAIFJFSi1iwzjUxPZvGIeYqTMSxSyjLXT8NJZaUlNvGLmzMSTsCal+E1h/9qCfeLeF2iv/ACTh5NRoCQoJ5GpZPyygoLMbsZiaMXLLhaQhYSXVTdNyKgD1yEPhMUhGwpk1KSFKxmHlEEiYlapUtU11JUGCWPw3uBzjK2DPabLdTgIW9mIcF8s3Z/McY6uVsLEYvYmAl4dC1HfzlLUokoSA8oKs5CXdmHBUSyjpP2MywZeAmVoAlI2ghSVKAWqqZKW6E8UgM54OI8s2vhZf2ie6UuJs0F6xcLUDkqPVv2ddkcdh5cqVNl00TscFl7UTZEoS1DiQVp4DhHn3bXDGXtDFoLVb+assrhNVvQljyColDOI2gkCYoAACzM7ZDneIDE+0v6xT9PkIrQAdBsLGzJxl4MJQVTlplha1THqWoUBRC2ACiWNJaonwj29s3E4aavDTFKNNL0KUqWoAApILAKAfNs3in2dIGLw5OW+lP4Vh47Qy1y5RUkKQNzNQQ97rmzGccLC0NdEzmpUw93+yflFFKyELFw7/ADiXDqVcWcAAAuCXt3edi56Rf2NghiZu77spJCzcqUO4KlBqnu0aSlbslIr4kkpSWLOfDKYW/SBKk3qpZz1b1TeD2rLKakcEqWAbh23gBY5Wa0bHYnCyl4lQmjugOlioGpSkIzStJuFHj5RIx9mYNH2VaDNwIWspUCqYmsJ7q6ApKSoEkBNJYC7tlGbs3DLVLM0y1JSSlKVUqCFXNQCjZwU8DHUY5QlT1rlJcBSkpKkpmJJUSyWmFTmpRzFm4NGltqef8nbtU3NKFGWhFNKkTJaQ+TkBRJbgoconYdHObV2uiSiQgpWVKlylFUtYlqpG8DJUUKYlVLuCGBDcYoK2pKUtRKMbUkj/AN6gX5/+Fip2onoUcOE3KJCUqL3epRpIfukPzyIMZcmekKVexZs4aS+QbOjk4mXMnAzt7SssVKmCbMHBJU0pNRyGYsIHFYdIKlIvLBIBNlFizkePWMiSWUDe3qWi/LxQUyEqpKlhiqyRUv8AErIBjmY6MeZx58GUsd9D3gH4R46EApQJyHgGh9o9mJ0mWZq5+HKPwlE6uvvKR3EpctUkhyAH4xhKBBZ+V7+73jT8j/Be0bqUqOSVG4FgTmQAGA4kgDqW8RnOlRSsFCk2KVClSTyUCHHnEvZrbc/DrUJM1UsKQoqAIFRQCtOaxkQ9i/Q5RmnHzJ04TZqqpilVlRsSXqdwL358oPyX9C9oLHIJSlYYpvyOTZjlF3AutKEAi78WGRzuwi5isRMmLK5gFc1KZpUofGVJUarKy7vANGZil1pAQALAqY8SA7io2c8Y55y2dmiVKixNw6wq8teRuUkcf3mhIQo5SyeFgfmI2NltMEhM6TvFLmywV9992hSUqCgJoszgEJ9DeNbD4SWnE0iV+6VIUhSUBMxclIMtQmhVVMwWqs5d2jSGdxVUTKFuzksZLUhZQsMpJYg5gjhFzB7KmLTV3Q/MsefAGDx2CTOm4f7mYhU1KwZeGQTMKklgShc1Wf0OcasnsJmDLxti3dEsizA59XPg0OfqeCjiOS22lI7pCnAAS4pILqPeBQCzHlyvGZJTm5Ata2ZyABAt4m1ovbWVZJPefN3cHvDp4xc2LgUTcNNmkBJkKli9wveVk5qS3wDJ8457NaNHs7gpaFy5wnFKgo3XMk0gBxcJmGblyQbx2/Z3tdMkzSzHeJAP3uHUoBPeFNWLA5i7G79I8/2VtABCQVsHuBOUgs7lv6WkA9aPIxt7O2pL+0pUibMlpdTV40VJBBb7wYuXwsbh/aFbCij2t2VIR99KE4rmTSVhapC0ip1Gnczpixfiu3WKeAxDpKXWXKwU1ySCGTYpVwccOfAsY3e2eOrw4Axe+U90b9UykM5Uxx88WNvhHjHMdnZxVisPUXDhwb1B2IZuMC6B0oxEohQmqW9SiBXg1IpJSQWUoF+rvxPGOb27hpc2aVImAWpYkLqotUN2KQCGs6uNzwsY6aRhZakqZW9IcM5+6lng3EvEHZ2apUyc9xulFndy6WeGBpYdk7OnSjM+FJUkBTV1LSSmgh7NwMR4ztF3JImBawUgrCVIDFKiChkS0saGL/xPziptucRugC33Q9StfI8os7Amn7Kshw80kHqJUywPDMGADPO0cMlRMqRNCbNUsOlP4hkxJ5+Fo6Pb3Z1UzCbMRKoK04QzSFrQgqTOnLmd0rIT3Sfhz71nvGJ2qUqqeHJAnLOeQOT9P0jt9tYoSMZKlPRu9n4RCkm9CviIKSk3ZT8OESxkH7JMPVLwKgkmjaGKBLOBXhEsTyumA252bMybLmIMtKpsvCky1JTKShKpCHpmKWbJYBqByiT9j+OVKw8mlakhW05aFBJICwuRMFKmzDgKY8UiN/beJX9pkS0oC1DDoUQhXeO6M2SWWlKu7ZOVnIhLyNng2IUSok5vyAytwtEcSYj41eJ+cBCAs7LV9/KP+sQf+IR08hYSxUkEUrqCn7w3iyXIANxyMUMFsyVVIZS61uVFKh3GJZhTZVnzNiPCOombIl/Zpk5K5lUtC2qpNTCoOyEkXJGZikJnF4+VLTOXu/hqJTn3RUoAXueEDhEmbiEJ4ksGLPyDnnl5xLiVpmISUSSmYCQte9KkqdzZCh3c+Zyiqg99YDCkLIIABt1EMCzhtmz5iVUSlmkXCUklzYWZ+fpHT9iqUYppksHuEFMwsxChY2SxChkTmI4yVtOckMmYoA2IBIBAuxANx4x0/ZeaoTiQDZIyKrfeJc90Es/6w7tCNHtWqUrEKpTLCXIABGVSXqCipk2PwniekWu0E5KcB3CXpVYFFDlcgnJAVy4ng5MZO2Zx36qwGrWosTcV5VEOXDnPjYRb2rNSvBqHeQAlQYlSwbyCVkkADgGv0MRRRwUyYVXNzEQi1MRchNwOLM/UwCMOo5hTc2JhtCLOfHWtcIZCmIIORHsX1pnBIclLeIb2iNK2IPIg+hGtF7AsTipVIUfhSSkVZvfug8FG9uJJ4xRlmNnHYpCwVUJF+4WAtSw4gi98oztn4ZMwrC5yJZAdJWFMs27rpBpLZEhuESmBf2Kvvqu33c7979xVrcM8+sZ+A+IeB5co1sNKly1hQnJWgpmgqShVlGWqhCnTmo8n8ox8KogpcHjwPJoqxG3ImEBg5dCbOWsVM7DxubxTxahSniKUm78vGJpC2ScwoISBc3Lq+nziitZKTnZKeJPTi8AjrezeKCAlXedKcg/NRZP9NlVcbAEg/hGarvZ/GpXiBVNUUEqAFa2BEyUoLB3xDungtWeZjE2LjaVyXHdcOFE8SaTkw71m/OB2DiRJUpSCd8VoRLk0rG8TMIUumaACkhgnK6VmJsdBdqECZJlTCr+qO6IVMqUpSgFGhImzGSDUSSQLjjYSYefh0JCZglJPCqWCSOBcp8vKLPbzdssy5ypxXOClqUhUu5Qm4QSae8CCM+4LmMv7PWiWQXZJB6ELVb0aDyBm7bxpmsspQm7NLSUp4qdiTe8XtgzKcFijUAN5h3cF7CZkRl6ekKFCY0S7NApl99YUVLAQkqHdb46zPSkCvukWPG8dDssTDNTQZ4N2SJzj4T+IbQQfcZccoeFDrgWFtzB4lWGm7+sbupSFb5U3eD4RWk46YJai/wCFCvGOU7OuMZhwc6g/XOFChpUInxcz+jS7uN6X85Mp2cD6RB2ZV95OP+pVa+QKc/5+sKFDALb6h90DdpQPNwSqLHZ5P9FX/tTk3+imDiIaFAhMPa+GE2dMQqZLlJM4krW9KQc3ZJL35R3e2jsfE4yfiztNKVTN3S0ub3BLloRdil7oe9riFChDNnsbgcHgJCzJ2gVIl4mTMmFWGcuUKSJLEGkqF60sR4GMP9pk6UZxXh9o4dK5RmImy5slVRWibNmUpO6WlwpRS1gWd+ShRCKPF1Fy8SJlcz6D9YeFDirEzd2afvJGb975H9PeOsXP/oU+/wCFYbxSCHa+UKFFNCPPsHOVWBVYkFnN42FywQbC+bWfxaFCjNloqnYLl94hKTkAFkjk7gfMxs7HwSZc5C1TN5LSpBLoYkBQUXS5D9Ogh4UbRSoybdmtjMEicnEk0pmFaVYQutggrO8lzRcABLFNrFxEc7ZU9ckymwyXfv1rcfDwEvPu5/lChQ1FWFsxf8zcQMp0hvFYf1lvF/BdkcSoplheHUSWBrUOv+jh4UJKwboDtD2Rm4aWmbPVLXLCglYkrNSaywPflgFwFWHK8ctiVyd26DNKys2WBSEt3TUk3V0ZrQoUTLhS6UK+caqsWGApLpSku4vZIYd2FCiUMlG01CUJQBoBE1ir8VJQMgOBPrFOdjVKpTwLZnIve/lChQwNLaOAnYb7udLCFFBbvpJH3jv3CQ/BjzMPgdkTsYqecPKCt3LrWkKCaEJHeUayCXN2D3PC0PChvwJFDBTO8xAWkJdi4DBlPZL/AMzHRdouz02RKlYxSEDDlYCCKCSVJStKFpCA7oBIcEMGPVoUJsZU28Upk2KVb1SVgjMKSVJUR90iyg1mAFOT3jNlpCgCar+OXDI8oUKAD//Z');
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    color: white;
+    padding: 90px 8%;
+    text-align: center;
+    }
+
+    header h1 {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    header p {
+      font-size: 18px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .overview {
+      padding: 40px 8%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      color: #4b4fd8;
+      margin-bottom: 10px;
+    }
+
+    .dashboard {
+      padding: 20px 8% 50px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 25px;
+    }
+
+    .sidebar {
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      height: fit-content;
+    }
+
+    .sidebar h2 {
+      margin-bottom: 20px;
+      color: #4b4fd8;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    select, input, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 20px;
+      background: #4b4fd8;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .main-panel {
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 25px;
+    }
+
+    .map-box {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    #map {
+      height: 430px;
+      background: linear-gradient(135deg, #dce3ff, #eef1ff);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4b4fd8;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .chart-placeholder {
+      height: 230px;
+      background: #eef1ff;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4b4fd8;
+      font-weight: bold;
+    }
+
+    .findings, .methods {
+      padding: 40px 8%;
+    }
+
+    .section-title {
+      font-size: 28px;
+      color: #4b4fd8;
+      margin-bottom: 20px;
+    }
+
+    .finding-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: #222;
+      color: white;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .overview,
+      .finding-grid,
+      .charts,
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Mapping Affordable, Safe, and Transit-Accessible Housing to UW</h1>
+    <p>
+      A smart interactive geography dashboard exploring spatial patterns,
+      inequality, environment, mobility, or public data through maps and charts.
+    </p>
+  </header>
+
+  <section class="overview">
+    <div class="card">
+      <h3>Research Question</h3>
+      <p>
+        How are geographic patterns distributed across the study area, and what
+        do these patterns reveal about social or environmental inequality?
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Study Area</h3>
+      <p>
+        This project focuses on a selected city, region, neighborhood, or
+        community using spatial data and interactive visualization.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Why It Matters</h3>
+      <p>
+        The dashboard helps viewers understand spatial differences more clearly
+        by connecting maps, data, and real-world geographic questions.
+      </p>
+    </div>
+  </section>
+
+  <section class="dashboard">
+
+    <aside class="sidebar">
+      <h2>Dashboard Filters</h2>
+
+      <label for="category">Category</label>
+      <select id="category">
+        <option>All Categories</option>
+        <option>Population</option>
+        <option>Income</option>
+        <option>Health</option>
+        <option>Environment</option>
+        <option>Transportation</option>
+      </select>
+
+      <label for="year">Year</label>
+      <input type="range" id="year" min="2000" max="2026" value="2026" />
+
+      <label for="area">Area Type</label>
+      <select id="area">
+        <option>All Areas</option>
+        <option>Urban</option>
+        <option>Suburban</option>
+        <option>Rural</option>
+      </select>
+
+      <button>Reset Filters</button>
+    </aside>
+
+    <main class="main-panel">
+
+      <div class="map-box">
+        <h2 class="section-title">Interactive Map</h2>
+        <div id="map">
+          Map Goes Here
+        </div>
+      </div>
+
+      <div class="charts">
+        <div class="card">
+          <h3>Chart 1</h3>
+          <div class="chart-placeholder">Bar / Line Chart</div>
+        </div>
+
+        <div class="card">
+          <h3>Chart 2</h3>
+          <div class="chart-placeholder">Pie / Comparison Chart</div>
+        </div>
+      </div>
+
+    </main>
+  </section>
+
+  <section class="findings">
+    <h2 class="section-title">Main Findings</h2>
+
+    <div class="finding-grid">
+      <div class="card">
+        <h3>Finding 1</h3>
+        <p>
+          One important spatial pattern appears in areas with higher or lower
+          access to resources.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Finding 2</h3>
+        <p>
+          The map shows that some communities are more strongly affected than
+          others.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Finding 3</h3>
+        <p>
+          The dashboard makes these differences easier to compare across places.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="methods">
+    <h2 class="section-title">Methods and Data</h2>
+
+    <div class="card">
+      <p>
+        This project uses public geographic data, cleaned and organized for
+        interactive visualization. The dashboard combines map-based analysis,
+        filters, and charts to help viewers explore spatial patterns. Possible
+        methods include data cleaning, classification, spatial comparison,
+        choropleth mapping, point mapping, and visual storytelling.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Created by Paisley Wu | GEOG Undergraduate Symposium</p>
+  </footer>
+
+</body>
+</html>
