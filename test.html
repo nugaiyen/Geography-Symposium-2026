@@ -494,6 +494,36 @@ nav ul{
         0 2px 10px rgba(0,0,0,0.7);
 }
 
+/* CRIME EXPLORER*/
+.crime-explorer{
+    background:white;
+    margin-top:40px;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.crime-explorer h3{
+    color:#4b2e83;
+    font-size:1.6rem;
+    margin-bottom:20px;
+}
+
+#crimeNeighborhoodSelect{
+    width:100%;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    font-size:1rem;
+    margin-bottom:20px;
+}
+
+#crimeNeighborhoodResult{
+    color:#444;
+    font-size:1.1rem;
+    line-height:1.8;
+}
+
 </style>
 
 </head>
@@ -717,17 +747,27 @@ UW Housing
     <div class="dashboard">
 
         <div class="chart">
-
-            Crime Graph 1
-
+            <canvas id="crimeNeighborhoodChart"></canvas>
         </div>
-
+    
         <div class="chart">
-
-            Crime Graph 2
-
+            <canvas id="crimeTypeChart"></canvas>
         </div>
+    
+    </div>
 
+    <div class="crime-explorer">
+
+        <h3>Explore Crime by Neighborhood</h3>
+    
+        <select id="crimeNeighborhoodSelect">
+            <option value="">Select a neighborhood</option>
+        </select>
+    
+        <div id="crimeNeighborhoodResult">
+            Select a neighborhood to view crime information.
+        </div>
+    
     </div>
 
 </section>
@@ -1195,6 +1235,9 @@ Papa.parse("data/HousingPayments_data.csv", {
     header: true,
     complete: function(results){
 
+        console.log(results.meta.fields);
+        console.log(results.data[0]);
+
         const housingData = results.data
             .map(row => {
 
@@ -1302,6 +1345,187 @@ Papa.parse("data/HousingPayments_data.csv", {
                 }
             }
         );
+    }
+});
+
+/* CRIME CHARTS FROM REAL CSV */
+
+Papa.parse("data/SeattleCrime.csv", {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+
+    complete: function(results){
+
+        const rows = results.data;
+
+        const crimeByNeighborhood = {};
+        const crimeByType = {};
+
+        rows.forEach(row => {
+
+            const neighborhood = row["Neighborhood"];
+            const offenseType = row["Offense Category"];
+            const count = Number(row["Count Distinct Offense"]);
+
+            if(neighborhood && !isNaN(count)){
+                crimeByNeighborhood[neighborhood] =
+                (crimeByNeighborhood[neighborhood] || 0) + count;
+            }
+
+            if(offenseType && !isNaN(count)){
+                crimeByType[offenseType] =
+                (crimeByType[offenseType] || 0) + count;
+            }
+
+        });
+
+        /* DROPDOWN */
+
+        const crimeSelect =
+        document.getElementById("crimeNeighborhoodSelect");
+
+        const crimeResult =
+        document.getElementById("crimeNeighborhoodResult");
+
+        crimeSelect.innerHTML =
+        `<option value="">Select a neighborhood</option>`;
+
+        Object.keys(crimeByNeighborhood)
+            .sort()
+            .forEach(neighborhood => {
+
+                const option = document.createElement("option");
+                option.value = neighborhood;
+                option.textContent = neighborhood;
+
+                crimeSelect.appendChild(option);
+
+            });
+
+        crimeSelect.addEventListener("change", function(){
+
+            const selected = this.value;
+
+            if(selected === ""){
+                crimeResult.innerHTML =
+                "Select a neighborhood to view crime information.";
+                return;
+            }
+
+            const totalCrime = crimeByNeighborhood[selected];
+
+            crimeResult.innerHTML =
+            `
+            <strong>${selected}</strong><br>
+            Total Reported Crime Incidents: ${totalCrime.toLocaleString()}<br>
+            This neighborhood can be compared with housing affordability and transit access.
+            `;
+
+        });
+
+        /* CHART DATA */
+
+        const neighborhoodData =
+        Object.entries(crimeByNeighborhood)
+            .map(([name,count]) => ({name,count}))
+            .sort((a,b) => b.count - a.count)
+            .slice(0,10);
+
+        const typeData =
+        Object.entries(crimeByType)
+            .map(([type,count]) => ({type,count}))
+            .sort((a,b) => b.count - a.count)
+            .slice(0,8);
+
+        new Chart(
+            document.getElementById("crimeNeighborhoodChart"),
+            {
+                type:"bar",
+                data:{
+                    labels:neighborhoodData.map(d => d.name),
+                    datasets:[{
+                        data:neighborhoodData.map(d => d.count),
+                        backgroundColor:"#b7a57a",
+                        borderRadius:12,
+                        barThickness:35
+                    }]
+                },
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    plugins:{
+                        title:{
+                            display:true,
+                            text:"Top 10 Neighborhoods by Crime Incidents",
+                            color:"#4b2e83",
+                            font:{size:20, weight:"bold", family:"Inter"}
+                        },
+                        subtitle:{
+                            display:true,
+                            text:"Total reported offenses by neighborhood",
+                            color:"#666",
+                            font:{size:13, family:"Inter"},
+                            padding:{bottom:20}
+                        },
+                        legend:{display:false}
+                    },
+                    scales:{
+                        x:{
+                            grid:{display:false},
+                            ticks:{maxRotation:35, minRotation:35}
+                        },
+                        y:{beginAtZero:true}
+                    }
+                }
+            }
+        );
+
+        new Chart(
+            document.getElementById("crimeTypeChart"),
+            {
+                type:"doughnut",
+                data:{
+                    labels:typeData.map(d => d.type),
+                    datasets:[{
+                        data:typeData.map(d => d.count),
+                        backgroundColor:[
+                            "#4b2e83",
+                            "#b7a57a",
+                            "#6b46c1",
+                            "#8b6f47",
+                            "#7c3aed",
+                            "#c4a484",
+                            "#5b21b6",
+                            "#d6c28d"
+                        ],
+                        borderWidth:2,
+                        borderColor:"#ffffff"
+                    }]
+                },
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    plugins:{
+                        title:{
+                            display:true,
+                            text:"Crime Type Distribution",
+                            color:"#4b2e83",
+                            font:{size:20, weight:"bold", family:"Inter"}
+                        },
+                        subtitle:{
+                            display:true,
+                            text:"Share of reported offenses by category",
+                            color:"#666",
+                            font:{size:13, family:"Inter"},
+                            padding:{bottom:20}
+                        },
+                        legend:{position:"bottom"}
+                    }
+                }
+            }
+        );
+
     }
 });
 
