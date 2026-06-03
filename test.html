@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mapping Affordable and Safe Housing Near UW</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --uw-purple:#4b2e83;
+    --uw-gold:#b7a57a;
+    --light:#f8f9fa;
+    --dark:#111;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#f7f7f7;
+    overflow-x:hidden;
+}
+
+/* NAVBAR */
+
+nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    padding:20px 60px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(0,0,0,0.65);
+    backdrop-filter:blur(10px);
+    z-index:9999;
+}
+
+.logo{
+    color:white;
+    font-size:1.4rem;
+    font-weight:700;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-weight:500;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:var(--uw-gold);
+}
+
+/* HERO */
+
+.hero{
+    height:100vh;
+    background:
+    linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55)),
+    url("https://www.visittheusa.com/wp-content/uploads/2026/01/WA_Seattle-Tacoma_VS_VisitSeattle_aerial_NeedleCity_CreditNickHall_2000px.jpg");
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+}
+
+.hero h1{
+    font-size:4.5rem;
+    max-width:1000px;
+}
+
+.hero p{
+    margin-top:20px;
+    font-size:1.3rem;
+}
+
+.scroll-btn{
+    display:inline-block;
+    margin-top:30px;
+    background:var(--uw-gold);
+    color:black;
+    text-decoration:none;
+    padding:15px 30px;
+    border-radius:40px;
+    font-weight:600;
+}
+
+/* GENERAL SECTIONS */
+
+section{
+    min-height:100vh;
+    padding:120px 10%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.fade{
+    opacity:0;
+    transform:translateY(80px);
+    transition:all 1s ease;
+}
+
+.fade.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+h2{
+    color:var(--uw-purple);
+    font-size:3rem;
+    margin-bottom:20px;
+}
+
+p{
+    line-height:1.8;
+    font-size:1.1rem;
+}
+
+/* CARDS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:30px;
+    margin-top:50px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.card h3{
+    font-size:3rem;
+    color:var(--uw-purple);
+}
+
+/* MAP */
+
+#map{
+    margin-top:30px;
+    height:650px;
+    border-radius:25px;
+    background:#ddd;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:2rem;
+    box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
+
+/* DASHBOARD */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    margin-top:40px;
+}
+
+.chart{
+    background:white;
+    height:500px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:1.4rem;
+}
+
+/* TRANSIT */
+
+.transit-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+    margin-top:40px;
+}
+
+.transit-card{
+    background:white;
+    border-radius:20px;
+    padding:35px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+    cursor:pointer;
+}
+
+.transit-card:hover{
+    transform:translateY(-10px);
+}
+
+/* EXPLORER */
+
+.recommender{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    margin-top:30px;
+}
+
+select{
+    width:100%;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+button{
+    padding:15px 25px;
+    border:none;
+    border-radius:30px;
+    background:var(--uw-purple);
+    color:white;
+    cursor:pointer;
+}
+
+#result{
+    margin-top:25px;
+    font-size:1.2rem;
+}
+
+/* FOOTER */
+
+footer{
+    background:var(--uw-purple);
+    color:white;
+    text-align:center;
+    padding:60px;
+}
+
+footer p{
+    margin-top:10px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.dashboard{
+    grid-template-columns:1fr;
+}
+
+.hero h1{
+    font-size:3rem;
+}
+
+nav{
+    padding:15px;
+}
+
+nav ul{
+    gap:12px;
+    font-size:.8rem;
+}
+
+}
+
+/* SPACE FOR CARDS IN OVERVIEW*/
+.overview-card{
+
+    background:white;
+    height:320px;
+
+    border-radius:25px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    transition:.4s;
+}
+
+.overview-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:35px;
+
+    margin-top:50px;
+
+}
+
+.overview-card:hover{
+
+    transform:translateY(-10px);
+
+}
+
+.emoji{
+
+    font-size:4rem;
+
+    transition:.4s;
+}
+
+.overview-card h3{
+
+    color:#4b2e83;
+    margin-top:15px;
+    font-size:1.6rem;
+}
+
+.card-info{
+
+    position:absolute;
+
+    inset:0;
+
+    background:#4b2e83;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    padding:30px;
+
+    text-align:center;
+
+    opacity:0;
+
+    transition:.4s;
+
+    font-size:1rem;
+
+    line-height:1.7;
+}
+
+.overview-card:hover .card-info{
+
+    opacity:1;
+
+}
+
+.card-info{
+    background:linear-gradient(
+        135deg,
+        #4b2e83,
+        #6b46c1
+    );
+}
+
+/* INTRO FOR OVERVIEW*/
+
+.highlight-box{
+
+    background:white;
+
+    border-left:6px solid #b7a57a;
+
+    padding:35px;
+
+    margin:30px auto 60px auto;
+
+    border-radius:20px;
+
+    max-width:1100px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+.highlight-box h3{
+
+    color:#4b2e83;
+
+    text-align:center;
+
+    font-size:1.4rem;
+
+    line-height:1.8;
+
+    font-weight:500;
+
+}
+
+/* card img */
+.icon img{
+
+    width:80px;
+    height:80px;
+
+    object-fit:contain;
+
+}
+
+/* HOUSING GRAPH CARDS*/
+.housing-stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+    margin:40px 0;
+}
+
+.housing-stat-card{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.housing-stat-card h3{
+    color:#4b2e83;
+    font-size:2.5rem;
+    margin-bottom:10px;
+}
+
+.housing-stat-card p{
+    color:#666;
+    font-size:1rem;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+UW Housing
+</div>
+
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#map-section">Map</a></li>
+<li><a href="#housing">Housing</a></li>
+<li><a href="#crime">Crime</a></li>
+<li><a href="#comparison">Compare</a></li>
+<li><a href="#transit">Transit</a></li>
+<li><a href="#methods">Methods</a></li>
+</ul>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div>
+
+        <h1>
+            Mapping Affordable and Safe Housing Near UW
+        </h1>
+
+        <p>
+            Exploring Housing Affordability, Crime Patterns,
+            and Transit Accessibility Across Seattle
+        </p>
+
+        <a href="#about" class="scroll-btn">
+            Explore Project ↓
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section id="about" class="fade">
+
+    <h2>Project Overview</h2>
+
+        <div class="highlight-box">
+
+            <h3>
+                Looking for housing near the University of Washington can be overwhelming. 
+                Rent prices, neighborhood safety, commute times, and transit access all influence where students choose to live. 
+                This platform is designed to simplify that process by combining housing, crime, and transportation information into a single interactive map. 
+                Whether you are searching for the most affordable option, the safest neighborhood, or the best transit connections to campus, 
+                this tool helps you explore and compare neighborhoods across Seattle.
+            </h3>
+        
+        </div>
+
+    <div class="overview-grid">
+
+        <div class="overview-card">
+    
+            <div class="icon">
+
+                <img src="https://www.clker.com/cliparts/0/g/Q/k/f/Z/simple-purple-house-hi.png"
+                     alt="Housing">
+            
+            </div>
+    
+            <h3>Housing</h3>
+    
+            <div class="card-info">
+    
+                Rising housing costs continue to make it challenging
+                for many students to find affordable places to live
+                near the University of Washington.
+    
+            </div>
+    
+        </div>
+    
+        <div class="overview-card">
+    
+            <div class="icon">
+
+                <img src="https://www.clker.com//cliparts/Q/M/o/N/7/X/purple-shield-hi.png"
+                     alt="Safety">
+            
+            </div>
+    
+            <h3>Safety</h3>
+    
+            <div class="card-info">
+    
+                Safety remains an important consideration when choosing
+                a neighborhood and finding a comfortable place to live.
+    
+            </div>
+    
+        </div>
+    
+        <div class="overview-card">
+    
+            <div class="icon">
+
+                <img src="https://www.freeiconspng.com/uploads/blue-bus-icon-14.png"
+                     alt="Transit">
+            
+            </div>
+    
+            <h3>Accessibility</h3>
+    
+            <div class="card-info">
+    
+                Reliable public transportation expands housing
+                opportunities throughout the Seattle region.
+    
+            </div>
+    
+        </div>
+    
+    </div>
+
+</section>
+
+
+<!-- MAP -->
+
+<section id="map-section" class="fade">
+
+    <h2>
+        Interactive Housing and Crime Explorer
+    </h2>
+
+    <p>
+        Explore affordable housing locations, crime patterns,
+        and transit accessibility throughout Seattle.
+    </p>
+
+    <div id="map">
+
+        ArcGIS Interactive Map
+
+    </div>
+
+</section>
+
+
+<!-- HOUSING -->
+
+<section id="housing" class="fade">
+
+    <h2>
+        Housing Affordability Analysis
+    </h2>
+
+    <p>
+        This section explores housing affordability patterns
+        across Seattle neighborhoods using housing payment data.
+    </p>
+
+    <div class="housing-stats">
+
+        <div class="housing-stat-card">
+            <h3 id="totalNeighborhoods">0</h3>
+            <p>Neighborhoods analyzed</p>
+        </div>
+    
+        <div class="housing-stat-card">
+            <h3 id="highestBurden">0%</h3>
+            <p>Highest housing burden</p>
+        </div>
+    
+        <div class="housing-stat-card">
+            <h3 id="mostAffected">0</h3>
+            <p>Neighborhoods displayed</p>
+        </div>
+    
+    </div>
+
+    <div class="dashboard">
+
+        <div class="chart">
+
+            <canvas id="housingChart"></canvas>
+        
+        </div>
+
+        <div class="chart">
+
+            <canvas id="housingComparisonChart"></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CRIME -->
+
+<section id="crime" class="fade">
+
+    <h2>
+        Crime and Safety Analysis
+    </h2>
+
+    <p>
+        Crime data was analyzed to identify safety patterns
+        and neighborhood-level differences throughout Seattle.
+    </p>
+
+    <div class="dashboard">
+
+        <div class="chart">
+
+            Crime Graph 1
+
+        </div>
+
+        <div class="chart">
+
+            Crime Graph 2
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- COMPARISON -->
+
+<section id="comparison" class="fade">
+
+    <h2>
+        Housing vs Crime Comparison
+    </h2>
+
+    <p>
+        This section compares affordability and safety indicators
+        to identify neighborhoods that may provide a balance
+        between cost and quality of life.
+    </p>
+
+    <div class="dashboard">
+
+        <div class="chart">
+
+            Rent vs Crime Scatter Plot
+
+        </div>
+
+        <div class="chart">
+
+            Neighborhood Ranking Chart
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TRANSIT -->
+
+<section id="transit" class="fade">
+
+    <h2>
+        Transit Accessibility
+    </h2>
+
+    <p>
+        Public transportation plays an important role in
+        determining housing accessibility for students.
+    </p>
+
+    <div class="transit-grid">
+
+        <div class="transit-card">
+            🚊 Link Light Rail
+        </div>
+
+        <div class="transit-card">
+            🚍 King County Metro
+        </div>
+
+        <div class="transit-card">
+            🚍 Community Transit
+        </div>
+
+        <div class="transit-card">
+            🚍 ST Express
+        </div>
+
+        <div class="transit-card">
+            🚍 Pierce Transit
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- NEIGHBORHOOD EXPLORER -->
+
+<section id="explorer" class="fade">
+
+    <h2>
+        Neighborhood Explorer
+    </h2>
+
+    <p>
+        Explore neighborhood characteristics based on
+        affordability, safety, and transit accessibility.
+    </p>
+
+    <div class="recommender">
+
+        <select id="neighborhood">
+
+            <option>Select Neighborhood</option>
+
+            <option>Ballard</option>
+            <option>Capitol Hill</option>
+            <option>Fremont</option>
+            <option>Northgate</option>
+            <option>Roosevelt</option>
+
+        </select>
+
+        <button onclick="showInfo()">
+
+            View Information
+
+        </button>
+
+        <div id="result">
+
+            Select a neighborhood above.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- METHODS -->
+
+<section id="methods" class="fade">
+
+    <h2>
+        Methods and Data Sources
+    </h2>
+
+    <div class="stats">
+
+        <div class="card">
+
+            Housing Dataset
+
+        </div>
+
+        <div class="card">
+
+            Seattle Crime Dataset
+
+        </div>
+
+        <div class="card">
+
+            Transit Dataset
+
+        </div>
+
+        <div class="card">
+
+            GIS Analysis
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- KEY FINDINGS -->
+
+<section id="findings" class="fade">
+
+    <h2>
+        Key Findings
+    </h2>
+
+    <div class="stats">
+
+        <div class="card">
+
+            Affordable housing options are unevenly distributed
+            throughout Seattle.
+
+        </div>
+
+        <div class="card">
+
+            Transit accessibility significantly expands housing
+            opportunities for students.
+
+        </div>
+
+        <div class="card">
+
+            Neighborhoods with lower crime rates often have
+            higher housing costs.
+
+        </div>
+
+        <div class="card">
+
+            A balance between affordability, safety, and transit
+            access can be achieved in several neighborhoods.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <h2>
+        Mapping Affordable and Safe Housing Near UW
+    </h2>
+
+    <p>
+        University of Washington Geography Data Science Symposium 2026
+    </p>
+
+    <p>
+        Paisley Wu & Lindsay Nguyen
+    </p>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+
+/* FADE IN SECTIONS */
+
+const observer = new IntersectionObserver(entries => {
+
+entries.forEach(entry => {
+
+    if(entry.isIntersecting){
+
+        entry.target.classList.add("show");
+
+    } else {
+
+        entry.target.classList.remove("show");
+
+    }
+
+    });
+
+    },{
+    threshold:0.2
+    });
+
+    document.querySelectorAll(".fade").forEach(section => {
+
+    observer.observe(section);
+
+});
+
+
+/* NEIGHBORHOOD EXPLORER */
+
+function showInfo(){
+
+    const neighborhood =
+    document.getElementById("neighborhood").value;
+
+    const result =
+    document.getElementById("result");
+
+    if(neighborhood==="Ballard"){
+
+        result.innerHTML=
+        `
+        <strong>Ballard</strong><br><br>
+        Housing Cost: High<br>
+        Crime Level: Moderate<br>
+        Transit Access: Good
+        `;
+    }
+
+    else if(neighborhood==="Capitol Hill"){
+
+        result.innerHTML=
+        `
+        <strong>Capitol Hill</strong><br><br>
+        Housing Cost: High<br>
+        Crime Level: Moderate<br>
+        Transit Access: Excellent
+        `;
+    }
+
+    else if(neighborhood==="Fremont"){
+
+        result.innerHTML=
+        `
+        <strong>Fremont</strong><br><br>
+        Housing Cost: Moderate<br>
+        Crime Level: Low<br>
+        Transit Access: Good
+        `;
+    }
+
+    else if(neighborhood==="Northgate"){
+
+        result.innerHTML=
+        `
+        <strong>Northgate</strong><br><br>
+        Housing Cost: Moderate<br>
+        Crime Level: Low<br>
+        Transit Access: Excellent
+        `;
+    }
+
+    else if(neighborhood==="Roosevelt"){
+
+        result.innerHTML=
+        `
+        <strong>Roosevelt</strong><br><br>
+        Housing Cost: Moderate<br>
+        Crime Level: Low<br>
+        Transit Access: Excellent
+        `;
+    }
+
+    else{
+
+        result.innerHTML=
+        "Select a neighborhood above.";
+
+    }
+
+}
+
+
+/* TRANSIT CARD CLICK EFFECT */
+
+const transitCards =
+document.querySelectorAll(".transit-card");
+
+transitCards.forEach(card => {
+
+    card.addEventListener("click", () => {
+
+        alert(
+            card.innerText +
+            " layer will be connected to the map later."
+        );
+
+    });
+
+});
+
+/* HOUSING CHART 1 FROM REAL housing.CSV */
+
+fetch("data/HousingPayments_data.csv")
+    .then(response => response.text())
+    .then(csvText => {
+
+        const rows = csvText.trim().split("\n");
+        const headers = rows[0].split(",");
+
+        const neighborhoodIndex =
+        headers.indexOf("Community Reporting Area");
+
+        const burdenIndex =
+        headers.indexOf("% Burdened");
+
+        let housingData = [];
+
+        for(let i = 1; i < rows.length; i++){
+
+            const cols = rows[i].split(",");
+
+            const neighborhood = cols[neighborhoodIndex];
+
+            const burden =
+            Number(cols[burdenIndex].replace("%",""));
+
+            if(neighborhood && !isNaN(burden)){
+
+                housingData.push({
+                    neighborhood: neighborhood,
+                    burden: burden
+                });
+
+            }
+        }
+
+        housingData.sort((a,b) => b.burden - a.burden);
+
+        const top10 = housingData.slice(0,10);
+
+        /* UPDATE STAT CARDS */
+
+    document.getElementById("totalNeighborhoods")
+    .innerText = housingData.length;
+
+    document.getElementById("highestBurden")
+        .innerText =
+        Math.max(
+            ...housingData.map(
+                d => d.burden
+            )
+        ) + "%";
+
+        document.getElementById("mostAffected")
+        .innerText = "10";
+
+        const labels =
+        top10.map(d => d.neighborhood);
+
+        const values =
+        top10.map(d => d.burden);
+
+        new Chart(
+            document.getElementById("housingChart"),
+            {
+                type: "bar",
+
+                data: {
+                    labels: labels,
+
+                    datasets: [{
+                        label: "Housing burden",
+                        data: values,
+                        backgroundColor: "#4b2e83",
+                        borderRadius: 12,
+                        barThickness: 35
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    animation: {
+                        duration: 2200,
+                        easing: "easeOutQuart"
+                    },
+
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Top 10 Neighborhoods by Housing Cost Burden",
+                            color: "#4b2e83",
+                            font: {
+                                size: 20,
+                                weight: "bold",
+                                family: "Inter"
+                            }
+                        },
+
+                        subtitle: {
+                            display: true,
+                            text: "Percentage of households burdened by housing costs",
+                            color: "#666",
+                            font: {
+                                size: 13,
+                                family: "Inter"
+                            },
+                            padding: {
+                                bottom: 20
+                            }
+                        },
+
+                        legend: {
+                            display: false
+                        }
+                    },
+
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: "#333",
+                                font: {
+                                    family: "Inter",
+                                    size: 11
+                                }
+                            }
+                        },
+
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: "#eeeeee"
+                            },
+                            ticks: {
+                                callback: function(value){
+                                    return value + "%";
+                                },
+                                color: "#333",
+                                font: {
+                                    family: "Inter",
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+    });
+
+/* HOUSING COMPOSITION CHART FROM REAL CSV */
+
+Papa.parse("data/HousingPayments_data.csv", {
+    download: true,
+    header: true,
+    complete: function(results){
+
+        const housingData = results.data
+            .map(row => {
+
+                const neighborhood = row["Community Reporting Area"];
+
+                const burdened = Number(row["Households Burdened"]);
+
+                const total = Number(row["Total Households"]);
+
+                return {
+                    neighborhood: neighborhood,
+                    burdened: burdened,
+                    notBurdened: total - burdened
+                };
+
+            })
+            .filter(d =>
+                d.neighborhood &&
+                !isNaN(d.burdened) &&
+                !isNaN(d.notBurdened)
+            )
+            .sort((a,b) => b.burdened - a.burdened)
+            .slice(0,10);
+
+        new Chart(
+            document.getElementById("housingComparisonChart"),
+            {
+                type: "bar",
+
+                data: {
+                    labels: housingData.map(d => d.neighborhood),
+
+                    datasets: [
+                        {
+                            label: "Burdened",
+                            data: housingData.map(d => d.burdened),
+                            backgroundColor: "#4b2e83",
+                            borderRadius: 8
+                        },
+                        {
+                            label: "Not Burdened",
+                            data: housingData.map(d => d.notBurdened),
+                            backgroundColor: "#b7a57a",
+                            borderRadius: 8
+                        }
+                    ]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    animation: {
+                        duration: 2200,
+                        easing: "easeOutQuart"
+                    },
+
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Burdened vs. Not Burdened Households",
+                            color: "#4b2e83",
+                            font: {
+                                size: 20,
+                                weight: "bold",
+                                family: "Inter"
+                            }
+                        },
+
+                        subtitle: {
+                            display: true,
+                            text: "Top 10 neighborhoods by number of housing-burdened households",
+                            color: "#666",
+                            font: {
+                                size: 13,
+                                family: "Inter"
+                            },
+                            padding: {
+                                bottom: 20
+                            }
+                        },
+
+                        legend: {
+                            position: "top"
+                        }
+                    },
+
+                    scales: {
+                        x: {
+                            stacked: true,
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                maxRotation: 35,
+                                minRotation: 35
+                            }
+                        },
+
+                        y: {
+                            stacked: true,
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+    }
+});
+
+</script>
+
+</body>
+</html>
