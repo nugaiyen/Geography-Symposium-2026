@@ -547,7 +547,7 @@
     }
 
     .leaflet-container a.leaflet-popup-close-button {
-        color: white;
+        color: white; 
         font-size: 18px;
     }
 
@@ -556,7 +556,14 @@
     padding: 2px 6px;
     background: rgba(255,255,255,0.7);
     border-radius: 6px;
-    }   
+    }  
+    
+    .bus-icon {
+     filter:hue-rotate(-150deg) saturate(0) brightness(100);
+    }
+
+
+  
 
     </style>
 
@@ -1609,48 +1616,73 @@ Papa.parse("data/SeattleCrime.csv", {
         
 
         // Transit stops 
-       // Create a high-priority pane for stops (DO THIS ONCE after map init)
+       //// BUS ICON
+        const iconURL = "https://www.freeiconspng.com/uploads/blue-bus-icon-14.png";
+
+        const busIcon = L.icon({
+            iconUrl: iconURL,
+            iconSize: [10, 10],
+            iconAnchor: [10, 10],
+            popupAnchor: [0, -12],
+            className: "bus-icon"
+        });
+
+        //// CREATE TOP PANE (keeps stops above everything else)
         map.createPane('stopsPane');
-        map.getPane('stopsPane').style.zIndex = 600;  // higher = more front
+        map.getPane('stopsPane').style.zIndex = 650;
         map.getPane('stopsPane').style.pointerEvents = 'auto';
 
+        //// LOAD BUS STOPS GEOJSON
         fetch('data/busStop.geojson')
             .then(res => res.json())
             .then(data => {
 
                 const stopLayer = L.geoJSON(data, {
 
-                    pane: 'stopsPane', // 👈 KEY: forces layer to render on top
+                    pane: 'stopsPane',
 
+                    //// REPLACE DOTS WITH BUS ICONS
                     pointToLayer: function(feature, latlng) {
-                        return L.circleMarker(latlng, {
-                            radius: 3,
-                            fillColor: '#aadb1e',
-                            color: '#000000',
-                            weight: 0.5,
-                            opacity: 1,
-                            fillOpacity: 1
+                        return L.marker(latlng, {
+                            icon: busIcon
                         });
                     },
 
+                    //// POPUP CONTENT
                     onEachFeature: function(feature, layer) {
 
                         layer.bindPopup(`
-                            <b>${feature.properties.stop_name}</b>
+                            <div style="
+                                font-family: Inter;
+                                min-width: 180px;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            ">
+
+                                <img src="${iconURL}"
+                                    style="width:15px;height:15px; filter: grayscale(1) brightness(0) invert(1);" />
+
+                                <div>
+                        
+                                        ${feature.properties.stop_name}
+                                    </b>
+                                </div>
+
+                            </div>
                         `);
 
                     }
 
                 }).addTo(map);
 
-                // Optional safety: re-force on top after map movements
+                //// keep icons on top when map moves/zooms
                 map.on('zoomend moveend', () => {
                     stopLayer.bringToFront();
                 });
 
             })
-            .catch(err => console.error("Error loading GeoJSON:", err));
-
+            .catch(err => console.error("Error loading bus stops:", err));
 
         // Transit route
         map.createPane('routesPane');
