@@ -1,530 +1,564 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Mapping Affordable and Safe Housing Near UW</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-:root{
-    --uw-purple:#4b2e83;
-    --uw-gold:#b7a57a;
-    --light:#f8f9fa;
-    --dark:#111;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    scroll-behavior:smooth;
-}
-
-body{
-    font-family:'Inter',sans-serif;
-    background:#f7f7f7;
-    overflow-x:hidden;
-}
-
-/* NAVBAR */
-
-nav{
-    position:fixed;
-    top:0;
-    width:100%;
-    padding:20px 60px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:rgba(0,0,0,0.65);
-    backdrop-filter:blur(10px);
-    z-index:9999;
-}
-
-.logo{
-    color:white;
-    font-size:1.4rem;
-    font-weight:700;
-}
-
-nav ul{
-    display:flex;
-    list-style:none;
-    gap:25px;
-}
-
-nav a{
-    color:white;
-    text-decoration:none;
-    font-weight:500;
-    transition:.3s;
-}
-
-nav a:hover{
-    color:var(--uw-gold);
-}
-
-/* HERO */
-
-.hero{
-    height:100vh;
-    background:
-    linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.35)),
-    url("https://cdn.uconnectlabs.com/wp-content/uploads/sites/25/2021/01/UWCampus-ReadingRoom.jpg");
-    background-size:cover;
-    background-position:center;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    color:white;
-}
-
-.hero h1{
-    font-size:4.5rem;
-    max-width:1000px;
-}
-
-.hero p{
-    margin-top:20px;
-    font-size:1.3rem;
-}
-
-.scroll-btn{
-    display:inline-block;
-    margin-top:30px;
-    background:var(--uw-gold);
-    color:black;
-    text-decoration:none;
-    padding:15px 30px;
-    border-radius:40px;
-    font-weight:600;
-}
-
-/* GENERAL SECTIONS */
-
-section{
-    min-height:100vh;
-    padding:120px 10%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-}
-
-.fade{
-    opacity:0;
-    transform:translateY(80px);
-    transition:all 1s ease;
-}
-
-.fade.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
-h2{
-    color:var(--uw-purple);
-    font-size:3rem;
-    margin-bottom:20px;
-}
-
-p{
-    line-height:1.8;
-    font-size:1.1rem;
-}
-
-/* CARDS */
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:30px;
-    margin-top:50px;
-}
-
-.card{
-    background:white;
-    border-radius:20px;
-    padding:40px;
-    text-align:center;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
-.card h3{
-    font-size:3rem;
-    color:var(--uw-purple);
-}
-
-/* MAP */
-
-#map{
-    margin-top:30px;
-    height:650px;
-    border-radius:25px;
-    background:#ddd;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:2rem;
-    box-shadow:0 10px 25px rgba(0,0,0,.1);
-}
-
-/* DASHBOARD */
-
-.dashboard{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:30px;
-    margin-top:40px;
-}
-
-.chart{
-    background:white;
-    height:500px;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:1.4rem;
-}
-
-/* TRANSIT */
-
-.transit-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:25px;
-    margin-top:40px;
-}
-
-.transit-card{
-    background:white;
-    border-radius:20px;
-    padding:35px;
-    text-align:center;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.3s;
-    cursor:pointer;
-}
-
-.transit-card:hover{
-    transform:translateY(-10px);
-}
-
-/* EXPLORER */
-
-.recommender{
-    background:white;
-    padding:40px;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    margin-top:30px;
-}
-
-select{
-    width:100%;
-    padding:15px;
-    border-radius:10px;
-    margin-bottom:20px;
-}
-
-button{
-    padding:15px 25px;
-    border:none;
-    border-radius:30px;
-    background:var(--uw-purple);
-    color:white;
-    cursor:pointer;
-}
-
-#result{
-    margin-top:25px;
-    font-size:1.2rem;
-}
-
-/* FOOTER */
+    <link rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mapping Affordable and Safe Housing Near UW</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+    :root{
+        --uw-purple:#4b2e83;
+        --uw-gold:#b7a57a;
+        --light:#f8f9fa;
+        --dark:#111;
+    }
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        scroll-behavior:smooth;
+    }
+
+    body{
+        font-family:'Inter',sans-serif;
+        background:#f7f7f7;
+        overflow-x:hidden;
+    }
+
+    /* NAVBAR */
+
+    nav{
+        position:fixed;
+        top:0;
+        width:100%;
+        padding:20px 60px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        background:rgba(0,0,0,0.65);
+        backdrop-filter:blur(10px);
+        z-index:9999;
+    }
+
+    .logo{
+        color:white;
+        font-size:1.4rem;
+        font-weight:700;
+    }
+
+    nav ul{
+        display:flex;
+        list-style:none;
+        gap:25px;
+    }
+
+    nav a{
+        color:white;
+        text-decoration:none;
+        font-weight:500;
+        transition:.3s;
+    }
+
+    nav a:hover{
+        color:var(--uw-gold);
+    }
+
+    /* HERO */
+
+    .hero{
+        height:100vh;
+        background:
+        linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.35)),
+        url("https://cdn.uconnectlabs.com/wp-content/uploads/sites/25/2021/01/UWCampus-ReadingRoom.jpg");
+        background-size:cover;
+        background-position:center;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        text-align:center;
+        color:white;
+    }
+
+    .hero h1{
+        font-size:4.5rem;
+        max-width:1000px;
+    }
+
+    .hero p{
+        margin-top:20px;
+        font-size:1.3rem;
+    }
+
+    .scroll-btn{
+        display:inline-block;
+        margin-top:30px;
+        background:var(--uw-gold);
+        color:black;
+        text-decoration:none;
+        padding:15px 30px;
+        border-radius:40px;
+        font-weight:600;
+    }
+
+    /* GENERAL SECTIONS */
+
+    section{
+        min-height:100vh;
+        padding:120px 10%;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+    }
+
+    .fade{
+        opacity:0;
+        transform:translateY(80px);
+        transition:all 1s ease;
+    }
+
+    .fade.show{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+    h2{
+        color:var(--uw-purple);
+        font-size:3rem;
+        margin-bottom:20px;
+    }
+
+    p{
+        line-height:1.8;
+        font-size:1.1rem;
+    }
+
+    /* CARDS */
+
+    .stats{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:30px;
+        margin-top:50px;
+    }
+
+    .card{
+        background:white;
+        border-radius:20px;
+        padding:40px;
+        text-align:center;
+        box-shadow:0 10px 25px rgba(0,0,0,.08);
+    }
+
+    .card h3{
+        font-size:3rem;
+        color:var(--uw-purple);
+    }
+
+    /* MAP */
+
+    #map{
+        margin-top:30px;
+        height:500px;
+        border-radius:25px;
+        background:#ddd;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-size:2rem;
+        box-shadow:0 10px 25px rgba(0,0,0,.1);
+    }
+
+    /* DASHBOARD */
+
+    .dashboard{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:30px;
+        margin-top:40px;
+    }
+
+    .chart{
+        background:white;
+        height:500px;
+        border-radius:20px;
+        box-shadow:0 10px 25px rgba(0,0,0,.08);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-size:1.4rem;
+    }
+
+    /* TRANSIT */
+
+    .transit-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:25px;
+        margin-top:40px;
+    }
+
+    .transit-card{
+        background:white;
+        border-radius:20px;
+        padding:35px;
+        text-align:center;
+        box-shadow:0 10px 25px rgba(0,0,0,.08);
+        transition:.3s;
+        cursor:pointer;
+    }
+
+    .transit-card:hover{
+        transform:translateY(-10px);
+    }
+
+    /* EXPLORER */
+
+    .recommender{
+        background:white;
+        padding:40px;
+        border-radius:20px;
+        box-shadow:0 10px 25px rgba(0,0,0,.08);
+        margin-top:30px;
+    }
+
+    select{
+        width:100%;
+        padding:15px;
+        border-radius:10px;
+        margin-bottom:20px;
+    }
+
+    button{
+        padding:15px 25px;
+        border:none;
+        border-radius:30px;
+        background:var(--uw-purple);
+        color:white;
+        cursor:pointer;
+    }
+
+    #result{
+        margin-top:25px;
+        font-size:1.2rem;
+    }
+
+    /* FOOTER */
+
+    footer{
+        background:var(--uw-purple);
+        color:white;
+        text-align:center;
+        padding:60px;
+    }
 
-footer{
-    background:var(--uw-purple);
-    color:white;
-    text-align:center;
-    padding:60px;
-}
+    footer p{
+        margin-top:10px;
+    }
 
-footer p{
-    margin-top:10px;
-}
+    /* MOBILE */
 
-/* MOBILE */
+    @media(max-width:900px){
 
-@media(max-width:900px){
+    .dashboard{
+        grid-template-columns:1fr;
+    }
 
-.dashboard{
-    grid-template-columns:1fr;
-}
+    .hero h1{
+        font-size:3rem;
+    }
 
-.hero h1{
-    font-size:3rem;
-}
+    nav{
+        padding:15px;
+    }
 
-nav{
-    padding:15px;
-}
+    nav ul{
+        gap:12px;
+        font-size:.8rem;
+    }
 
-nav ul{
-    gap:12px;
-    font-size:.8rem;
-}
+    }
 
-}
+    /* SPACE FOR CARDS IN OVERVIEW*/
+    .overview-card{
 
-/* SPACE FOR CARDS IN OVERVIEW*/
-.overview-card{
+        background:white;
+        height:320px;
 
-    background:white;
-    height:320px;
+        border-radius:25px;
 
-    border-radius:25px;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
 
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
+        position:relative;
 
-    position:relative;
+        overflow:hidden;
 
-    overflow:hidden;
+        cursor:pointer;
 
-    cursor:pointer;
+        transition:.4s;
+    }
 
-    transition:.4s;
-}
+    .overview-grid{
 
-.overview-grid{
+        display:grid;
 
-    display:grid;
+        grid-template-columns:
+        repeat(3,1fr);
 
-    grid-template-columns:
-    repeat(3,1fr);
+        gap:35px;
 
-    gap:35px;
+        margin-top:50px;
 
-    margin-top:50px;
+    }
 
-}
+    .overview-card:hover{
 
-.overview-card:hover{
+        transform:translateY(-10px);
 
-    transform:translateY(-10px);
+    }
 
-}
+    .emoji{
 
-.emoji{
+        font-size:4rem;
 
-    font-size:4rem;
+        transition:.4s;
+    }
 
-    transition:.4s;
-}
+    .overview-card h3{
 
-.overview-card h3{
+        color:#4b2e83;
+        margin-top:15px;
+        font-size:1.6rem;
+    }
 
-    color:#4b2e83;
-    margin-top:15px;
-    font-size:1.6rem;
-}
+    .card-info{
 
-.card-info{
+        position:absolute;
 
-    position:absolute;
+        inset:0;
 
-    inset:0;
+        background:#4b2e83;
 
-    background:#4b2e83;
+        color:white;
 
-    color:white;
+        display:flex;
 
-    display:flex;
+        justify-content:center;
+        align-items:center;
 
-    justify-content:center;
-    align-items:center;
+        padding:30px;
 
-    padding:30px;
+        text-align:center;
 
-    text-align:center;
+        opacity:0;
 
-    opacity:0;
+        transition:.4s;
 
-    transition:.4s;
+        font-size:1rem;
 
-    font-size:1rem;
+        line-height:1.7;
+    }
 
-    line-height:1.7;
-}
+    .overview-card:hover .card-info{
 
-.overview-card:hover .card-info{
+        opacity:1;
 
-    opacity:1;
+    }
 
-}
+    .card-info{
+        background:linear-gradient(
+            135deg,
+            #4b2e83,
+            #6b46c1
+        );
+    }
 
-.card-info{
-    background:linear-gradient(
-        135deg,
-        #4b2e83,
-        #6b46c1
-    );
-}
+    /* INTRO FOR OVERVIEW*/
 
-/* INTRO FOR OVERVIEW*/
+    .highlight-box{
 
-.highlight-box{
+        background:white;
 
-    background:white;
+        border-left:6px solid #b7a57a;
 
-    border-left:6px solid #b7a57a;
+        padding:35px;
 
-    padding:35px;
+        margin:30px auto 60px auto;
 
-    margin:30px auto 60px auto;
+        border-radius:20px;
 
-    border-radius:20px;
+        max-width:1100px;
 
-    max-width:1100px;
+        box-shadow:0 10px 25px rgba(0,0,0,.08);
 
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    }
 
-}
+    .highlight-box h3{
 
-.highlight-box h3{
+        color:#4b2e83;
 
-    color:#4b2e83;
+        text-align:center;
 
-    text-align:center;
+        font-size:1.4rem;
 
-    font-size:1.4rem;
+        line-height:1.8;
 
-    line-height:1.8;
+        font-weight:500;
 
-    font-weight:500;
+    }
 
-}
+    /* card img */
+    .icon img{
 
-/* card img */
-.icon img{
+        width:80px;
+        height:80px;
 
-    width:80px;
-    height:80px;
+        object-fit:contain;
 
-    object-fit:contain;
+    }
 
-}
+    /* HOUSING GRAPH CARDS*/
+    .housing-stats{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:25px;
+        margin:40px 0;
+    }
 
-/* HOUSING GRAPH CARDS*/
-.housing-stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:25px;
-    margin:40px 0;
-}
+    .housing-stat-card{
+        background:white;
+        border-radius:20px;
+        padding:30px;
+        text-align:center;
+        box-shadow:0 10px 25px rgba(0,0,0,.08);
+    }
 
-.housing-stat-card{
-    background:white;
-    border-radius:20px;
-    padding:30px;
-    text-align:center;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
+    .housing-stat-card h3{
+        color:#4b2e83;
+        font-size:2.5rem;
+        margin-bottom:10px;
+    }
 
-.housing-stat-card h3{
-    color:#4b2e83;
-    font-size:2.5rem;
-    margin-bottom:10px;
-}
+    .housing-stat-card p{
+        color:#666;
+        font-size:1rem;
+    }
 
-.housing-stat-card p{
-    color:#666;
-    font-size:1rem;
-}
+    /* BLUR EDGE */
+    .hero{
+        position:relative;
+    }
 
-/* BLUR EDGE */
-.hero{
-    position:relative;
-}
+    .hero::after{
+        content:"";
 
-.hero::after{
-    content:"";
+        position:absolute;
+        left:0;
+        bottom:0;
 
-    position:absolute;
-    left:0;
-    bottom:0;
+        width:100%;
+        height:250px;
 
-    width:100%;
-    height:250px;
+        background:linear-gradient(
+            to bottom,
+            rgba(247,247,247,0) 0%,
+            rgba(247,247,247,0.2) 30%,
+            rgba(247,247,247,0.6) 60%,
+            rgba(247,247,247,1) 100%
+        );
 
-    background:linear-gradient(
-        to bottom,
-        rgba(247,247,247,0) 0%,
-        rgba(247,247,247,0.2) 30%,
-        rgba(247,247,247,0.6) 60%,
-        rgba(247,247,247,1) 100%
-    );
+        pointer-events:none;
+    }
 
-    pointer-events:none;
-}
+    .hero-content{
+        position:relative;
+        z-index:10;
+    }
 
-.hero-content{
-    position:relative;
-    z-index:10;
-}
+    .hero h1{
+        text-shadow:
+            0 4px 20px rgba(0,0,0,0.7);
 
-.hero h1{
-    text-shadow:
-        0 4px 20px rgba(0,0,0,0.7);
+        font-weight:800;
+    }
 
-    font-weight:800;
-}
+    .hero p{
+        text-shadow:
+            0 2px 10px rgba(0,0,0,0.7);
+    }
 
-.hero p{
-    text-shadow:
-        0 2px 10px rgba(0,0,0,0.7);
-}
+    /* CRIME EXPLORER*/
+    .crime-explorer{
+        background:white;
+        margin-top:40px;
+        padding:35px;
+        border-radius:20px;
+        box-shadow:0 10px 25px rgba(0,0,0,.08);
+    }
 
-/* CRIME EXPLORER*/
-.crime-explorer{
-    background:white;
-    margin-top:40px;
-    padding:35px;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
+    .crime-explorer h3{
+        color:#4b2e83;
+        font-size:1.6rem;
+        margin-bottom:20px;
+    }
 
-.crime-explorer h3{
-    color:#4b2e83;
-    font-size:1.6rem;
-    margin-bottom:20px;
-}
+    #crimeNeighborhoodSelect{
+        width:100%;
+        padding:15px;
+        border-radius:12px;
+        border:1px solid #ddd;
+        font-size:1rem;
+        margin-bottom:20px;
+    }
 
-#crimeNeighborhoodSelect{
-    width:100%;
-    padding:15px;
-    border-radius:12px;
-    border:1px solid #ddd;
-    font-size:1rem;
-    margin-bottom:20px;
-}
+    #crimeNeighborhoodResult{
+        color:#444;
+        font-size:1.1rem;
+        line-height:1.8;
+    }
 
-#crimeNeighborhoodResult{
-    color:#444;
-    font-size:1.1rem;
-    line-height:1.8;
-}
+    .leaflet-popup-content-wrapper {
+    background: #4b2e83; /* UW purple */
+    color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    font-family: 'Inter', sans-serif;
+    }
 
-</style>
+    .leaflet-popup-content {
+        margin: 12px 16px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .leaflet-popup-tip {
+        background: #4b2e83;
+    }
+
+    .leaflet-container a.leaflet-popup-close-button {
+        color: white;
+        font-size: 18px;
+    }
+
+    .leaflet-control-attribution {
+    font-size: 9px;
+    padding: 2px 6px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 6px;
+    }   
+
+    </style>
 
 </head>
 
@@ -671,11 +705,7 @@ UW Housing
         and transit accessibility throughout Seattle.
     </p>
 
-    <div id="map">
-
-        ArcGIS Interactive Map
-
-    </div>
+    <div id="map"></div>
 
 </section>
 
@@ -1525,6 +1555,129 @@ Papa.parse("data/SeattleCrime.csv", {
                 }
             }
         );
+
+        /* AVG HOUSING AN ACCESS TO PUBLIC TRANSIT*/
+        const map = L.map('map').setView([47.655, -122.308], 11);
+        L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        ).addTo(map);
+
+       /* // Neighborhood polygons
+        fetch('data/neighborhood.geojson')
+        .then(res => res.json())
+        .then(data => {
+            L.geoJSON(data).addTo(map);
+        });
+        */
+
+        // Housing layer
+        fetch('data/housingAvg.geojson')
+        .then(res => res.json())
+        .then(data => {
+
+            function getColor(price) {
+                return price > 2539 ? '#4b1f7a' :
+                    price > 1881 ? '#6d2479' :
+                    price > 1537 ? '#8c5d74' :
+                    price > 1216 ? '#b08b69' :
+                                    '#c5b25d';
+            }
+
+            L.geoJSON(data, {
+                style: function(feature) {
+                    return {
+                        fillColor: getColor(feature.properties.PRICE_NOM),
+                        weight: .5,
+                        opacity: 1,
+                        color: 'white',
+                        fillOpacity: 0.8
+                    };
+                },
+
+                onEachFeature: function(feature, layer) {
+
+                    layer.bindPopup(`
+                        <b>${feature.properties.CRA_NAME}</b><br>
+                        Average Housing Cost: $${feature.properties.PRICE_NOM.toLocaleString()}<br>
+                        Housing Cost Category: ${feature.properties.COST}
+                    `);
+
+                }
+            }).addTo(map);
+
+        }); 
+        
+
+        // Transit stops 
+       // Create a high-priority pane for stops (DO THIS ONCE after map init)
+        map.createPane('stopsPane');
+        map.getPane('stopsPane').style.zIndex = 600;  // higher = more front
+        map.getPane('stopsPane').style.pointerEvents = 'auto';
+
+        fetch('data/busStop.geojson')
+            .then(res => res.json())
+            .then(data => {
+
+                const stopLayer = L.geoJSON(data, {
+
+                    pane: 'stopsPane', // 👈 KEY: forces layer to render on top
+
+                    pointToLayer: function(feature, latlng) {
+                        return L.circleMarker(latlng, {
+                            radius: 3,
+                            fillColor: '#aadb1e',
+                            color: '#000000',
+                            weight: 0.5,
+                            opacity: 1,
+                            fillOpacity: 1
+                        });
+                    },
+
+                    onEachFeature: function(feature, layer) {
+
+                        layer.bindPopup(`
+                            <b>${feature.properties.stop_name}</b>
+                        `);
+
+                    }
+
+                }).addTo(map);
+
+                // Optional safety: re-force on top after map movements
+                map.on('zoomend moveend', () => {
+                    stopLayer.bringToFront();
+                });
+
+            })
+            .catch(err => console.error("Error loading GeoJSON:", err));
+
+
+        // Transit route
+        map.createPane('routesPane');
+        map.getPane('routesPane').style.zIndex = 400;
+        map.getPane('routesPane').style.pointerEvents = 'auto';
+
+        fetch('data/busRoutes.geojson')
+            .then(res => res.json())
+            .then(data => {
+
+                const routeLayer = L.geoJSON(data, {
+                    pane: 'routesPane', // 👈 MUST be inside this object
+
+                    style: function(feature) {
+                        return {
+                            color: '#2ad2c9',
+                            weight: 1,
+                            opacity: 0.8
+                        };
+                    }
+
+                }).addTo(map);
+
+            })
+            .catch(err => console.error("Error loading routes:", err));
+        
+        
 
     }
 });
