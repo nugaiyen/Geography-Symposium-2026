@@ -1646,70 +1646,80 @@ Papa.parse("data/SeattleCrime.csv", {
        //// BUS ICON
         const iconURL = "https://www.freeiconspng.com/uploads/blue-bus-icon-14.png";
 
+        //// DOT ICON (zoomed out)
+        const dotIcon = L.divIcon({
+            className: "dot-icon",
+            html: `<div style="
+                width:5px;
+                height:5px;
+                background:white;
+                border-radius:50%;
+                box-shadow:0 0 3px rgba(0,0,0,0.3);
+            "></div>`,
+            iconSize: [8, 8]
+        });
+
+        //// BUS ICON (zoomed in)
         const busIcon = L.icon({
             iconUrl: iconURL,
-            iconSize: [10, 10],
-            iconAnchor: [10, 10],
-            popupAnchor: [0, -12],
+            iconSize: [18, 18],
+            iconAnchor: [9, 9],
             className: "bus-icon"
         });
 
-        //// CREATE TOP PANE (keeps stops above everything else)
+        //// PANE (still useful — KEEP THIS)
         map.createPane('stopsPane');
         map.getPane('stopsPane').style.zIndex = 650;
         map.getPane('stopsPane').style.pointerEvents = 'auto';
 
-        //// LOAD BUS STOPS GEOJSON
+        let stopLayer;
+
+        //// LOAD BUS STOPS
         fetch('data/busStop.geojson')
             .then(res => res.json())
             .then(data => {
 
-                const stopLayer = L.geoJSON(data, {
+                stopLayer = L.geoJSON(data, {
 
                     pane: 'stopsPane',
 
-                    //// REPLACE DOTS WITH BUS ICONS
-                    pointToLayer: function(feature, latlng) {
+                    pointToLayer: function (feature, latlng) {
                         return L.marker(latlng, {
-                            icon: busIcon
+                            icon: dotIcon   // default = zoomed out
                         });
                     },
 
-                    //// POPUP CONTENT
-                    onEachFeature: function(feature, layer) {
+                    onEachFeature: function (feature, layer) {
 
                         layer.bindPopup(`
-                            <div style="
-                                font-family: Inter;
-                                min-width: 180px;
-                                display: flex;
-                                align-items: center;
-                                gap: 10px;
-                            ">
-
+                            <div style="display:flex; align-items:center; gap:8px;">
                                 <img src="${iconURL}"
-                                    style="width:15px;height:15px; filter: grayscale(1) brightness(0) invert(1);" />
-
-                                <div>
-                        
-                                        ${feature.properties.stop_name}
-                                    </b>
-                                </div>
-
+                                    style="width:15px;height:15px;
+                                            filter: grayscale(1) brightness(0) invert(1);" />
+                                <div>${feature.properties.stop_name}</div>
                             </div>
                         `);
-
                     }
-
                 }).addTo(map);
 
-                //// keep icons on top when map moves/zooms
-                map.on('zoomend moveend', () => {
-                    stopLayer.bringToFront();
-                });
+                updateBusIcons(); // run once after load
+            });
 
-            })
-            .catch(err => console.error("Error loading bus stops:", err));
+        //// ZOOM SWITCH LOGIC
+        function updateBusIcons() {
+            const zoom = map.getZoom();
+            if (!stopLayer) return;
+
+            stopLayer.eachLayer(layer => {
+                if (zoom >= 14) {
+                    layer.setIcon(busIcon);
+                } else {
+                    layer.setIcon(dotIcon);
+                }
+            });
+        }
+
+        map.on('zoomend', updateBusIcons);
 
         // Transit route
         map.createPane('routesPane');
