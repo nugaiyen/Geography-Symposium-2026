@@ -562,6 +562,27 @@
      filter:hue-rotate(-150deg) saturate(0) brightness(100);
     }
 
+    .reset-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+
+    background: #4b2e83;
+    color: white;
+    cursor: pointer;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .reset-btn:hover {
+        transform: scale(1.05);
+    }
+
 
   
 
@@ -701,6 +722,7 @@ UW Housing
 
 <!-- MAP -->
 
+
 <section id="map-section" class="fade">
 
     <h2>
@@ -712,7 +734,12 @@ UW Housing
         and transit accessibility throughout Seattle.
     </p>
 
-    <div id="map"></div>
+    <div id="map">
+        <button id="resetZoomBtn" class="reset-btn">
+            Reset View
+        </button>
+    </div>
+    
 
 </section>
 
@@ -1564,7 +1591,7 @@ Papa.parse("data/SeattleCrime.csv", {
         );
 
         /* AVG HOUSING AN ACCESS TO PUBLIC TRANSIT*/
-        const map = L.map('map').setView([47.655, -122.308], 11);
+        const map = L.map('map').setView([47.64, -122.308], 11);
         L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         ).addTo(map);
@@ -1707,8 +1734,62 @@ Papa.parse("data/SeattleCrime.csv", {
                 }).addTo(map);
 
             })
-            .catch(err => console.error("Error loading routes:", err));
-        
+        .catch(err => console.error("Error loading routes:", err));
+
+        //Reset
+        const defaultView = [47.64, -122.308];
+        const defaultZoom = 11;
+
+        document.getElementById("resetZoomBtn").addEventListener("click", () => {
+            map.setView(defaultView, defaultZoom);
+        });
+
+
+        // Legend
+        const legend = L.control({ position: "bottomleft" });
+
+        legend.onAdd = function () {
+            const div = L.DomUtil.create("div", "info legend");
+
+            div.innerHTML = `
+                <div style="font-family:Inter; font-size:13px; line-height:1.6; background:white; padding:12px 14px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.2);">
+
+                    <b style="color:#4b2e83;">Average Housing Prices</b><br><br>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                        <span style="width:26px;height:14px;background:#4b1f7a;display:inline-block;border-radius:3px;"></span>
+                        > $2539
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                        <span style="width:26px;height:14px;background:#6d2479;display:inline-block;border-radius:3px;"></span>
+                        $1881 – $2539
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                        <span style="width:26px;height:14px;background:#8c5d74;display:inline-block;border-radius:3px;"></span>
+                        $1537 – $1881
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px;margin-bottom:6px;">
+                        <span style="width:26px;height:14px;background:#b08b69;display:inline-block;border-radius:3px;"></span>
+                        $1216 – $1537
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="width:26px;height:14px;background:#c5b25d;display:inline-block;border-radius:3px;"></span>
+                        < $1216 
+                    </div>
+
+                </div>
+            `;
+
+            return div;
+        };
+
+        legend.addTo(map);
+
+
         
 
     }
