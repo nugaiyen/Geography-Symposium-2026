@@ -600,12 +600,60 @@
     /* Phone screen layout */
     @media (max-width:768px){
 
+    nav{
+        padding:10px 15px;
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .logo{
+        font-size:1.3rem;
+    }
+
+    .logo img{
+        height:28px;
+    }
+
+    nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:10px;
+        font-size:.75rem;
+    }
+
+    section{
+        padding:100px 5%;
+    }
+
+    .hero h1{
+        font-size:2.2rem;
+        line-height:1.2;
+    }
+
+    .hero p{
+        font-size:1rem;
+    }
+
+    h2{
+        font-size:2rem;
+    }
+
+    .overview-grid,
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    .overview-card{
+        height:260px;
+    }
+
     .chart{
+        height:520px;
         overflow-x:auto;
     }
 
-    .chart canvas{
-        min-width:700px;
+    #map{
+        height:420px;
     }
 
     }
@@ -1825,10 +1873,6 @@ Papa.parse("data/SeattleCrime.csv", {
         };
 
         legend.addTo(map);
-
-
-        
-
     }
 });
 
