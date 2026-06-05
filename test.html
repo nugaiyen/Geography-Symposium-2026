@@ -1774,7 +1774,7 @@ Papa.parse("data/SeattleCrime.csv", {
         }); 
         
 
-        // Transit stops 
+           // Transit stops 
        //// BUS ICON
         const iconURL = "https://www.freeiconspng.com/uploads/blue-bus-icon-14.png";
 
@@ -1836,7 +1836,6 @@ Papa.parse("data/SeattleCrime.csv", {
 
                 updateBusIcons(); // run once after load
             });
-            
 
         //// ZOOM SWITCH LOGIC
         function updateBusIcons() {
@@ -1853,9 +1852,6 @@ Papa.parse("data/SeattleCrime.csv", {
         }
 
         map.on('zoomend', updateBusIcons);
-        let stopsVisible = true;
-
-    
 
         // Transit route
         map.createPane('routesPane');
@@ -1881,11 +1877,6 @@ Papa.parse("data/SeattleCrime.csv", {
 
             })
         .catch(err => console.error("Error loading routes:", err));
-        const overlays = {
-            "Bus Stops": stopLayer
-        };
-
-        L.control.layers(null, overlays).addTo(map);
 
         //Reset
         const defaultView = [47.64, -122.308];
