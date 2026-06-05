@@ -112,7 +112,7 @@
     /* GENERAL SECTIONS */
 
     section{
-        min-height:100vh;
+        min-height:auto;
         padding:120px 10%;
         display:flex;
         flex-direction:column;
@@ -601,9 +601,20 @@
     @media (max-width:768px){
 
     nav{
-        padding:10px 15px;
+        position:relative;
+        padding:12px;
         flex-direction:column;
-        gap:10px;
+    }
+
+    nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:8px;
+        margin-top:8px;
+    }
+
+    nav a{
+        font-size:12px;
     }
 
     .logo{
@@ -614,20 +625,18 @@
         height:28px;
     }
 
-    nav ul{
-        flex-wrap:wrap;
-        justify-content:center;
-        gap:10px;
-        font-size:.75rem;
+    section{
+        padding:50px 5%;
+        min-height:auto;
     }
 
-    section{
-        padding:100px 5%;
+    .hero{
+        height:auto;
+        padding:120px 20px 80px;
     }
 
     .hero h1{
-        font-size:2.2rem;
-        line-height:1.2;
+        font-size:2rem;
     }
 
     .hero p{
@@ -643,19 +652,22 @@
         grid-template-columns:1fr;
     }
 
-    .overview-card{
-        height:260px;
+    .highlight-box{
+        padding:22px;
+    }
+
+    .highlight-box h3{
+        font-size:1rem;
     }
 
     .chart{
-        height:520px;
+        height:550px;
         overflow-x:auto;
     }
 
     #map{
         height:420px;
     }
-
     }
 
     </style>
