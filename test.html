@@ -918,15 +918,7 @@
     <div class="recommender">
 
         <select id="neighborhood">
-
-            <option>Select Neighborhood</option>
-
-            <option>Ballard</option>
-            <option>Capitol Hill</option>
-            <option>Fremont</option>
-            <option>Northgate</option>
-            <option>Roosevelt</option>
-
+            <option value="">Select Neighborhood</option>
         </select>
 
         <button onclick="showInfo()">
@@ -1037,96 +1029,63 @@ entries.forEach(entry => {
 
 
 /* NEIGHBORHOOD EXPLORER */
+Papa.parse("data/HousingPayments_data.csv", {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results){
 
-function showInfo(){
+        const neighborhoodSelect = document.getElementById("neighborhood");
+        const result = document.getElementById("result");
 
-    const neighborhood =
-    document.getElementById("neighborhood").value;
+        const neighborhoodData = {};
 
-    const result =
-    document.getElementById("result");
+        results.data.forEach(row => {
+            const name = row["Community Reporting Area"];
+            const burden = Number(String(row["% Burdened"]).replace("%",""));
+            const total = Number(row["Total Households"]);
 
-    if(neighborhood==="Ballard"){
+            if(name && !isNaN(burden) && !isNaN(total)){
+                if(!neighborhoodData[name]){
+                    neighborhoodData[name] = {
+                        burdens: [],
+                        totalHouseholds: 0
+                    };
+                }
 
-        result.innerHTML=
-        `
-        <strong>Ballard</strong><br><br>
-        Housing Cost: High<br>
-        Crime Level: Moderate<br>
-        Transit Access: Good
-        `;
+                neighborhoodData[name].burdens.push(burden);
+                neighborhoodData[name].totalHouseholds += total;
+            }
+        });
+
+        Object.keys(neighborhoodData).sort().forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            option.textContent = name;
+            neighborhoodSelect.appendChild(option);
+        });
+
+        neighborhoodSelect.addEventListener("change", function(){
+
+            const selected = this.value;
+
+            if(selected === ""){
+                result.innerHTML = "Select a neighborhood above.";
+                return;
+            }
+
+            const data = neighborhoodData[selected];
+            const avgBurden =
+                data.burdens.reduce((a,b) => a + b, 0) / data.burdens.length;
+
+            result.innerHTML = `
+                <strong>${selected}</strong><br><br>
+                Average Housing Burden: ${avgBurden.toFixed(1)}%<br>
+                Total Households: ${data.totalHouseholds.toLocaleString()}<br>
+                This neighborhood can be compared with safety and transit access.
+            `;
+        });
     }
-
-    else if(neighborhood==="Capitol Hill"){
-
-        result.innerHTML=
-        `
-        <strong>Capitol Hill</strong><br><br>
-        Housing Cost: High<br>
-        Crime Level: Moderate<br>
-        Transit Access: Excellent
-        `;
-    }
-
-    else if(neighborhood==="Fremont"){
-
-        result.innerHTML=
-        `
-        <strong>Fremont</strong><br><br>
-        Housing Cost: Moderate<br>
-        Crime Level: Low<br>
-        Transit Access: Good
-        `;
-    }
-
-    else if(neighborhood==="Northgate"){
-
-        result.innerHTML=
-        `
-        <strong>Northgate</strong><br><br>
-        Housing Cost: Moderate<br>
-        Crime Level: Low<br>
-        Transit Access: Excellent
-        `;
-    }
-
-    else if(neighborhood==="Roosevelt"){
-
-        result.innerHTML=
-        `
-        <strong>Roosevelt</strong><br><br>
-        Housing Cost: Moderate<br>
-        Crime Level: Low<br>
-        Transit Access: Excellent
-        `;
-    }
-
-    else{
-
-        result.innerHTML=
-        "Select a neighborhood above.";
-
-    }
-
-}
-
-
-/* TRANSIT CARD CLICK EFFECT */
-
-const transitCards =
-document.querySelectorAll(".transit-card");
-
-transitCards.forEach(card => {
-
-    card.addEventListener("click", () => {
-
-        alert(
-            card.innerText +
-            " layer will be connected to the map later."
-        );
-
-    });
-
 });
 
 /* HOUSING CHART 1 FROM REAL housing.CSV */
