@@ -598,54 +598,16 @@
     }
 
     /* Phone screen layout */
-    @media (max-width: 768px) {
+    @media (max-width:768px){
 
-    .hero h1 {
-        font-size: 2.4rem;
-        line-height: 1.15;
-        padding: 0 18px;
+    .chart{
+        overflow-x:auto;
     }
 
-    .hero p {
-        font-size: 1rem;
-        padding: 0 20px;
+    .chart canvas{
+        min-width:700px;
     }
 
-    .section-title {
-        font-size: 2rem;
-        text-align: center;
-    }
-
-    .chart-container,
-    .graph-container,
-    .plot-container {
-        width: 100%;
-        overflow-x: auto;
-    }
-
-    .chart-container img,
-    .graph-container img,
-    .plot-container img {
-        width: 100%;
-        height: auto;
-        max-width: 100%;
-    }
-
-    iframe,
-    canvas,
-    svg {
-        max-width: 100%;
-    }
-
-    nav {
-        flex-wrap: wrap;
-        padding: 12px 20px;
-    }
-
-    nav a {
-        font-size: 0.9rem;
-        margin: 6px;
-    }
     }
 
     </style>
@@ -1324,10 +1286,11 @@ fetch("data/HousingPayments_data.csv")
                                 display: false
                             },
                             ticks: {
-                                color: "#333",
+                                maxRotation: 60,
+                                minRotation: 60,
+                                autoSkip: false,
                                 font: {
-                                    family: "Inter",
-                                    size: 11
+                                    size: 10
                                 }
                             }
                         },
@@ -1414,6 +1377,7 @@ Papa.parse("data/HousingPayments_data.csv", {
                 },
 
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
 
