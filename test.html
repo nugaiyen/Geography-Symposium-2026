@@ -44,7 +44,7 @@
         display:flex;
         justify-content:space-between;
         align-items:center;
-        background:rgba(0,0,0,0.65);
+        background:#4b2e83;
         backdrop-filter:blur(10px);
         z-index:9999;
     }
@@ -583,8 +583,70 @@
         transform: scale(1.05);
     }
 
+    /* Navbar logo*/
+    .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 2rem;
+    }
 
-  
+    .logo img {
+        height: 40px;
+        width: auto;
+    }
+
+    /* Phone screen layout */
+    @media (max-width: 768px) {
+
+    .hero h1 {
+        font-size: 2.4rem;
+        line-height: 1.15;
+        padding: 0 18px;
+    }
+
+    .hero p {
+        font-size: 1rem;
+        padding: 0 20px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .chart-container,
+    .graph-container,
+    .plot-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .chart-container img,
+    .graph-container img,
+    .plot-container img {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+    }
+
+    iframe,
+    canvas,
+    svg {
+        max-width: 100%;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        padding: 12px 20px;
+    }
+
+    nav a {
+        font-size: 0.9rem;
+        margin: 6px;
+    }
+    }
 
     </style>
 
@@ -595,7 +657,8 @@
 <nav>
 
 <div class="logo">
-UW Housing
+    <img src="https://s3.us-west-2.amazonaws.com/media.ooica.net/wp-content/uploads/2019/01/03214601/uw_w-logo_white.png" alt="UW Logo">
+    <span>Housing Explorer</span>
 </div>
 
 <ul>
