@@ -1222,9 +1222,32 @@ fetch("data/HousingPayments_data.csv")
             }
         }
 
-        housingData.sort((a,b) => b.burden - a.burden);
+        const grouped = {};
 
-        const top10 = housingData.slice(0,10);
+        housingData.forEach(d => {
+
+            if(!grouped[d.neighborhood]){
+                grouped[d.neighborhood] = {
+                    total: 0,
+                    count: 0
+                };
+            }
+
+            grouped[d.neighborhood].total += d.burden;
+            grouped[d.neighborhood].count += 1;
+
+        });
+
+        const housingAverage = Object.keys(grouped).map(name => ({
+            neighborhood: name,
+            burden:
+                grouped[name].total /
+                grouped[name].count
+        }));
+
+        housingAverage.sort((a,b) => b.burden - a.burden);
+
+        const top10 = housingAverage.slice(0,10);
 
         /* UPDATE STAT CARDS */
 
@@ -1266,6 +1289,7 @@ fetch("data/HousingPayments_data.csv")
                 },
 
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
 
@@ -1306,36 +1330,30 @@ fetch("data/HousingPayments_data.csv")
 
                     scales: {
                         x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                maxRotation: 60,
-                                minRotation: 60,
-                                autoSkip: false,
-                                font: {
-                                    size: 10
-                                }
-                            }
-                        },
-
-                        y: {
                             beginAtZero: true,
+                            max: 80,
                             grid: {
                                 color: "#eeeeee"
                             },
                             ticks: {
                                 callback: function(value){
                                     return value + "%";
-                                },
-                                color: "#333",
+                                }
+                            }
+                        },
+
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
                                 font: {
-                                    family: "Inter",
-                                    size: 12
+                                    size: 11
                                 }
                             }
                         }
-                    }
+
+                        }
                 }
             }
         );
@@ -1567,6 +1585,7 @@ Papa.parse("data/SeattleCrime.csv", {
                     }]
                 },
                 options:{
+                    indexAxis: 'y',
                     responsive:true,
                     maintainAspectRatio:false,
                     plugins:{
