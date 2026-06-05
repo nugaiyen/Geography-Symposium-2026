@@ -653,6 +653,21 @@
         height:70px;
     }
 
+    /* neighborhood explorer*/
+    #result {
+    margin-top: 20px;
+    padding: 25px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    font-size: 1rem;
+    line-height: 1.7;
+    }
+
+    #result h3 {
+        color: #4b2e83;
+        font-weight: 700;
+    }
     </style>
 
 </head>
@@ -921,12 +936,6 @@
             <option value="">Select Neighborhood</option>
         </select>
 
-        <button onclick="showInfo()">
-
-            View Information
-
-        </button>
-
         <div id="result">
 
             Select a neighborhood above.
@@ -1027,7 +1036,6 @@ entries.forEach(entry => {
 
 });
 
-
 /* NEIGHBORHOOD EXPLORER */
 Papa.parse("data/HousingPayments_data.csv", {
     download: true,
@@ -1078,12 +1086,25 @@ Papa.parse("data/HousingPayments_data.csv", {
             const avgBurden =
                 data.burdens.reduce((a,b) => a + b, 0) / data.burdens.length;
 
-            result.innerHTML = `
-                <strong>${selected}</strong><br><br>
-                Average Housing Burden: ${avgBurden.toFixed(1)}%<br>
-                Total Households: ${data.totalHouseholds.toLocaleString()}<br>
-                This neighborhood can be compared with safety and transit access.
-            `;
+                result.innerHTML = `
+                    <h3 style="color:#4b2e83; font-weight:700; margin-bottom:10px;">
+                        ${selected}
+                    </h3>
+
+                    <p>
+                        <strong>Average Housing Burden:</strong>
+                        ${avgBurden.toFixed(1)}%
+                    </p>
+
+                    <p>
+                        <strong>Total Households:</strong>
+                        ${data.totalHouseholds.toLocaleString()}
+                    </p>
+
+                    <p>
+                        This neighborhood can be compared with safety and transit accessibility.
+                    </p>
+                `;
         });
     }
 });
