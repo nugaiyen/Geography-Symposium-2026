@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Mapping Affordable and Safe Housing Near UW</title>
+    <link rel="icon" type="image/png" href="img/house.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -156,7 +157,19 @@
         padding:40px;
         text-align:center;
         box-shadow:0 10px 25px rgba(0,0,0,.08);
+        text-decoration: none !important;  /* forces removal */
+        color: #b7a57a;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
     }
+
+    .card:hover {
+    background-color: #b7a57a;  /* light blue hover */
+    transform: scale(1.03);
+    color: #ffffff;
+}
+
+
 
     .card h3{
         font-size:3rem;
@@ -261,7 +274,7 @@
     }
 
     footer p{
-        margin-top:10px;
+        margin-top:0px;
     }
 
     /* MOBILE */
@@ -668,11 +681,103 @@
         color: #4b2e83;
         font-weight: 700;
     }
+
+
+   .expand-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+
+    width: 110px;
+    height: 40px;
+
+    padding: 12px 16px;
+
+    border: none;
+    border-radius: 20px;
+    background: #4a2e8377;
+    color: white;
+
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+    .expand-btn.expanded {
+        width: 230px;
+        height:200px;
+        background: #4b2e83;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;   /* LEFT align horizontally */
+        justify-content: flex-start; /* TOP align vertically */
+        text-align: left;
+        padding: 16px 16px; 
+        white-space: normal; /* 👈 KEY FIX */
+    }
+
+    .text {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .expand-btn.expanded .text {
+        opacity: 1;
+    }
+
+    .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    }
+
+    .profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-top: 10px;
+    }
+
+    .contact-text {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        font-size: 13px;
+    }
+
+  
     </style>
 
 </head>
 
-<body>
+<button id="myButton" class="expand-btn">
+  Contact Info
+  <div class="panel">
+    <div class="contact-row">
+      <img class="profile-pic" src="img/pfpm.png">
+
+      <div class="contact-text">
+        <div><br>Paisley Wu: paisley040829@gmail.com</div>
+      </div>
+    </div>
+
+    <div class="contact-row">
+      <img class="profile-pic" src="img/pfpl.png">
+
+      <div class="contact-text">
+        <div>Lindsay Nguyen: Lindsayyn02@gmail.com</div>
+      </div>
+    </div>
+  </div>
+</button>
 
 <nav>
 
@@ -690,6 +795,7 @@
 </ul>
 
 </nav>
+
 
 <!-- HERO -->
 
@@ -807,12 +913,11 @@
 <section id="map-section" class="fade">
 
     <h2>
-        Interactive Housing and Crime Explorer
+        Interactive Housing
     </h2>
 
     <p>
-        Explore affordable housing locations, crime patterns,
-        and transit accessibility throughout Seattle.
+        Explore affordable housing locations with direct public transit access to UW.
     </p>
 
     <div id="map">
@@ -957,29 +1062,37 @@
 
     <div class="stats">
 
-        <div class="card">
+       <a class="card"
+        href="https://data-seattlecitygis.opendata.arcgis.com/datasets/SeattleCityGIS::apartment-market-rent-prices-by-census-tract/explore?location=47.614610%2C-122.336904%2C11"
+        target="_blank">
 
             Housing Dataset
 
-        </div>
+        </a>
 
-        <div class="card">
+        <a class="card"
+        href="https://www.seattle.gov/police/information-and-data/data/crime-dashboard"
+        target="_blank">
 
             Seattle Crime Dataset
 
-        </div>
+        </a>
 
-        <div class="card">
+        <a class="card"
+        href="https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd/otd-downloads"
+        target="_blank">
 
             Transit Dataset
 
-        </div>
+        </a>
 
-        <div class="card">
+        <a class="card"
+        href="https://www.seattle.gov/rsji/racial-equity-research/housing-affordability"
+        target="_blank">
 
-            GIS Analysis
+            Burden Dataset
 
-        </div>
+        </a>
 
     </div>
 
@@ -1007,6 +1120,12 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <script>
+    const button = document.getElementById("myButton");
+
+    button.addEventListener("click", () => {
+        button.classList.toggle("expanded");
+    });
+        
 
 /* FADE IN SECTIONS */
 
@@ -1717,6 +1836,7 @@ Papa.parse("data/SeattleCrime.csv", {
 
                 updateBusIcons(); // run once after load
             });
+            
 
         //// ZOOM SWITCH LOGIC
         function updateBusIcons() {
@@ -1733,6 +1853,9 @@ Papa.parse("data/SeattleCrime.csv", {
         }
 
         map.on('zoomend', updateBusIcons);
+        let stopsVisible = true;
+
+    
 
         // Transit route
         map.createPane('routesPane');
@@ -1758,6 +1881,11 @@ Papa.parse("data/SeattleCrime.csv", {
 
             })
         .catch(err => console.error("Error loading routes:", err));
+        const overlays = {
+            "Bus Stops": stopLayer
+        };
+
+        L.control.layers(null, overlays).addTo(map);
 
         //Reset
         const defaultView = [47.64, -122.308];
