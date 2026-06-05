@@ -600,17 +600,25 @@
     /* Phone screen layout */
     @media (max-width:768px){
 
+    body{
+        padding-top:95px;
+    }
+
     nav{
-        position:relative;
-        padding:12px;
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        padding:10px 12px;
         flex-direction:column;
+        gap:8px;
     }
 
     nav ul{
         flex-wrap:wrap;
         justify-content:center;
         gap:8px;
-        margin-top:8px;
+        margin-top:5px;
     }
 
     nav a{
@@ -623,50 +631,6 @@
 
     .logo img{
         height:28px;
-    }
-
-    section{
-        padding:50px 5%;
-        min-height:auto;
-    }
-
-    .hero{
-        height:auto;
-        padding:120px 20px 80px;
-    }
-
-    .hero h1{
-        font-size:2rem;
-    }
-
-    .hero p{
-        font-size:1rem;
-    }
-
-    h2{
-        font-size:2rem;
-    }
-
-    .overview-grid,
-    .dashboard{
-        grid-template-columns:1fr;
-    }
-
-    .highlight-box{
-        padding:22px;
-    }
-
-    .highlight-box h3{
-        font-size:1rem;
-    }
-
-    .chart{
-        height:550px;
-        overflow-x:auto;
-    }
-
-    #map{
-        height:420px;
     }
     }
 
