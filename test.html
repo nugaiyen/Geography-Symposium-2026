@@ -671,9 +671,7 @@
 <li><a href="#map-section">Map</a></li>
 <li><a href="#housing">Housing</a></li>
 <li><a href="#crime">Safety</a></li>
-<li><a href="#comparison">Compare</a></li>
-<li><a href="#transit">Transit</a></li>
-<li><a href="#methods">Methods</a></li>
+<li><a href="#methods">Resources</a></li>
 </ul>
 
 </nav>
@@ -903,80 +901,6 @@
     </div>
 
 </section>
-
-
-<!-- COMPARISON -->
-
-<section id="comparison" class="fade">
-
-    <h2>
-        Housing vs Crime Comparison
-    </h2>
-
-    <p>
-        This section compares affordability and safety indicators
-        to identify neighborhoods that may provide a balance
-        between cost and quality of life.
-    </p>
-
-    <div class="dashboard">
-
-        <div class="chart">
-
-            Rent vs Crime Scatter Plot
-
-        </div>
-
-        <div class="chart">
-
-            Neighborhood Ranking Chart
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- TRANSIT -->
-
-<section id="transit" class="fade">
-
-    <h2>
-        Transit Accessibility
-    </h2>
-
-    <p>
-        Public transportation plays an important role in
-        determining housing accessibility for students.
-    </p>
-
-    <div class="transit-grid">
-
-        <div class="transit-card">
-            🚊 Link Light Rail
-        </div>
-
-        <div class="transit-card">
-            🚍 King County Metro
-        </div>
-
-        <div class="transit-card">
-            🚍 Community Transit
-        </div>
-
-        <div class="transit-card">
-            🚍 ST Express
-        </div>
-
-        <div class="transit-card">
-            🚍 Pierce Transit
-        </div>
-
-    </div>
-
-</section>
-
 
 <!-- NEIGHBORHOOD EXPLORER -->
 
@@ -1908,6 +1832,133 @@ Papa.parse("data/SeattleCrime.csv", {
 
         legend.addTo(map);
     }
+});
+
+// crime vs housing: all matched neighborhoods
+Promise.all([
+    fetch("data/HousingPayments_data.csv").then(res => res.text()),
+    fetch("data/SeattleCrime.csv").then(res => res.text())
+]).then(([housingText, crimeText]) => {
+
+    const housingResults = Papa.parse(housingText, {
+        header: true,
+        skipEmptyLines: true
+    });
+
+    const crimeResults = Papa.parse(crimeText, {
+        header: true,
+        skipEmptyLines: true
+    });
+
+    function getValue(row, columnName){
+        const key = Object.keys(row).find(k => k.trim() === columnName);
+        return key ? row[key] : undefined;
+    }
+
+    function cleanName(name){
+        return String(name)
+            .toLowerCase()
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    const housingGrouped = {};
+
+    housingResults.data.forEach(row => {
+        const name = getValue(row, "Community Reporting Area");
+        const burden = Number(String(getValue(row, "% Burdened")).replace("%", ""));
+
+        if(name && !isNaN(burden)){
+            const key = cleanName(name);
+
+            if(!housingGrouped[key]){
+                housingGrouped[key] = {
+                    name: name,
+                    totalBurden: 0,
+                    count: 0
+                };
+            }
+
+            housingGrouped[key].totalBurden += burden;
+            housingGrouped[key].count += 1;
+        }
+    });
+
+    const crimeGrouped = {};
+
+    crimeResults.data.forEach(row => {
+        const name = getValue(row, "Neighborhood");
+        const count = Number(getValue(row, "Count Distinct Offense"));
+
+        if(name && !isNaN(count)){
+            const key = cleanName(name);
+            crimeGrouped[key] = (crimeGrouped[key] || 0) + count;
+        }
+    });
+
+    const compareData = Object.keys(housingGrouped)
+        .filter(key => crimeGrouped[key])
+        .map(key => ({
+            neighborhood: housingGrouped[key].name,
+            x: housingGrouped[key].totalBurden / housingGrouped[key].count,
+            y: crimeGrouped[key]
+        }));
+
+    console.log("Housing keys:", Object.keys(housingGrouped).slice(0,20));
+    console.log("Crime keys:", Object.keys(crimeGrouped).slice(0,20));
+    console.log("Matched:", compareData.length);
+
+    new Chart(document.getElementById("rentCrimeChart"), {
+        type: "scatter",
+
+        data: {
+            datasets: [{
+                label: "Neighborhoods",
+                data: compareData,
+                backgroundColor: "#4b2e83",
+                pointRadius: 6
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Housing Burden vs Crime"
+                },
+
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.raw.neighborhood + ": " +
+                                context.raw.x.toFixed(1) + "% burden, " +
+                                context.raw.y.toLocaleString() + " crimes";
+                        }
+                    }
+                }
+            },
+
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Average Housing Burden (%)"
+                    }
+                },
+
+                y: {
+                    title: {
+                        display: true,
+                        text: "Total Reported Crime"
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 });
 
 </script>
